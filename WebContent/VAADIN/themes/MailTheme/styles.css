@@ -1,0 +1,42 @@
+@charset "UTF-8";
+@import "../runo/styles.css";
+	
+.header{
+	background-color:#DCE5EE;
+	height:51px;
+	padding-top:5px;
+	padding-bottom: 5px;
+}
+
+.headerBar{
+	margin-right: 5px;
+}
+
+
+.subViewContainer{
+	width:100%;
+	height:100%;
+	padding: 5px 5px;
+}
+
+.breadcrumbs {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #999;
+    background: -moz-linear-gradient(top, #fff, #ccc);	
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
+    line-height: 24px;
+    padding-left: 18px;
+    height: 24px;
+   	
+}
+
+.breadcrumbs .breadcrumb-element {
+	float: left;
+	margin-right: 5px;
+	display: inline-block;
+	height: 24px;
+}
+
+.breadcrumbs .breadcrumb-element.v-label {
+    line-height: 24px;	
+}
