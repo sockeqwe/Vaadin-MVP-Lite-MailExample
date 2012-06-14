@@ -94,10 +94,13 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		HorizontalLayout fromButtonLayout = new HorizontalLayout();
 		fromButtonLayout.setWidth("100%");
 		fromButtonLayout.addComponent(fromLabel);
+		fromButtonLayout.addComponent(answerButton);
 		fromButtonLayout.addComponent(readButton);
 		
 		fromButtonLayout.setComponentAlignment(fromLabel, Alignment.MIDDLE_LEFT);
+		fromButtonLayout.setComponentAlignment(answerButton, Alignment.MIDDLE_RIGHT);
 		fromButtonLayout.setComponentAlignment(readButton, Alignment.MIDDLE_RIGHT);
+		fromButtonLayout.setExpandRatio(fromLabel, 1);		
 		
 		layout.addComponent(fromButtonLayout);
 		layout.addComponent(toLabel);

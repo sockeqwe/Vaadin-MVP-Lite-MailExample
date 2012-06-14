@@ -5,9 +5,11 @@ import com.mvpvaadin.event.EventHandler;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.view.NavigateableView;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Runo;
 
-public class StatisticsViewImpl extends VerticalLayout implements StatisticsView {
+public class StatisticsViewImpl extends Panel implements StatisticsView {
 	
 	private static final long serialVersionUID = -3900718906900018585L;
 	
@@ -58,19 +60,23 @@ public class StatisticsViewImpl extends VerticalLayout implements StatisticsView
 	
 	
 	private void generateUI(){
-		Label welcomeTitle = new Label("Statistics");
-		welcomeTitle.setStyleName("h2");
+		setCaption("Statistics");
 		
 		unreadCountLabel = new Label();
 		usernameLabel = new Label();
 		emailAddressLabel = new Label();
 		outboxCountLabel = new Label();
 		
-		this.addComponent(welcomeTitle);
-		this.addComponent(usernameLabel);
-		this.addComponent(emailAddressLabel);
-		this.addComponent(unreadCountLabel);
-		this.addComponent(outboxCountLabel);
+		VerticalLayout layout = new VerticalLayout();
+		layout.addComponent(usernameLabel);
+		layout.addComponent(emailAddressLabel);
+		layout.addComponent(unreadCountLabel);
+		layout.addComponent(outboxCountLabel);
+		
+		this.setStyleName(Runo.PANEL_LIGHT);
+		this.addStyleName("panelWhite");
+		this.setSizeFull();
+		this.addComponent(layout);
 	}
 
 
