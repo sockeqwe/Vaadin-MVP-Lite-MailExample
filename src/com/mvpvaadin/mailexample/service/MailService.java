@@ -60,7 +60,7 @@ public class MailService {
 			
 			String subject = subjects[rand.nextInt(subjects.length)];
 			Date date = new Date();
-			date.setTime(date.getTime()-rand.nextInt(1209600));
+			date.setTime(date.getTime()-rand.nextInt(1209600000));
 			Mail m = new Mail(sender, receiver, subject, msgBody, date);
 			mails.add(m);
 		}

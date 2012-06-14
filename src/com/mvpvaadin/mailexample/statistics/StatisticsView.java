@@ -1,8 +1,8 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.view.SubView;
+import com.mvpvaadin.view.NavigateableSubView;
 
-public interface StatisticsView extends SubView{
+public interface StatisticsView extends NavigateableSubView{
 	
 	public void setUnreadMailsCount(int unread);
 	public void setUsername(String username);

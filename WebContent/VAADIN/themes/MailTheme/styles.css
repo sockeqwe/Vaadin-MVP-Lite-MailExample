@@ -16,7 +16,11 @@
 .subViewContainer{
 	width:100%;
 	height:100%;
-	padding: 5px 5px;
+}
+
+
+.panelWhite{
+	background-color: white;
 }
 
 .breadcrumbs {

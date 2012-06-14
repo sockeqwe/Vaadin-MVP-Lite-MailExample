@@ -9,27 +9,27 @@ import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
 import com.mvpvaadin.presenter.Presenter;
 
-public class ReadMailPresenter extends Presenter<ReadMailView> implements Serializable{
+public class ReadMailPresenter extends Presenter<ReadMailView> 
+								implements Serializable {
 
 	private static final long serialVersionUID = -3405453759181143858L;
 	
-	private Mail mail;
 	private MailService service;
 	private User user;
 	
 	public ReadMailPresenter(ReadMailView view, EventBus eventBus, User user, MailService service) {
 		super(view, eventBus);
 		this.service = service;
+		this.user = user;
 	}
 	
 	
 	public void setMail(Mail mail){
-		this.mail = mail;
 		getView().setMail(mail);
 	}
 
 	
-	public void markMailAsRead(){
+	public void markMailAsRead(Mail mail){
 		if (!mail.isRead())
 		{
 			mail.setRead(true);
@@ -38,8 +38,17 @@ public class ReadMailPresenter extends Presenter<ReadMailView> implements Serial
 			getEventBus().fireEvent(new UnreadCountChangedEvent(unreadCount));
 		}
 			
-			
 	}
 	
+	
+	public void markMailAsUnread(Mail mail){
+		if (mail.isRead())
+		{
+			mail.setRead(false);
+			int unreadCount = service.getUnreadInboxCountOf(user);
+			getEventBus().fireEvent(new UnreadCountChangedEvent(unreadCount));
+		}
+	}
+
 	
 }

@@ -8,7 +8,9 @@ import com.mvpvaadin.event.EventType;
  * @author Hannes Dorfmann
  *
  */
-public class ShowInboxViewRequiredEvent extends Event<ShowInboxViewRequiredHandler>{
+public class ShowInboxViewEvent extends Event<ShowInboxViewRequiredHandler>{
+
+	private static final long serialVersionUID = 1343424346698621544L;
 
 	public static final EventType<ShowInboxViewRequiredHandler> TYPE = new EventType<ShowInboxViewRequiredHandler>();
 	

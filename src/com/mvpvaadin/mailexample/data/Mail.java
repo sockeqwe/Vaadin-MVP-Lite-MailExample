@@ -12,6 +12,8 @@ public class Mail implements Serializable{
 	
 	private static final long serialVersionUID = -327820292880169853L;
 	
+	private static int idCounter = 0;
+	private int id;
 	private String sender;
 	private String receiver;
 	private String subject;
@@ -23,6 +25,7 @@ public class Mail implements Serializable{
 	
 	
 	public Mail(String sender, String receiver, String subject, String message, Date date) {
+		this.id = id++;
 		this.receiver = receiver;
 		this.sender = sender;
 		this.date = date;
@@ -72,6 +75,14 @@ public class Mail implements Serializable{
 
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

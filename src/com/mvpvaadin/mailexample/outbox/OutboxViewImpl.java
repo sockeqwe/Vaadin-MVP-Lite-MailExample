@@ -1,8 +1,9 @@
-package com.mvpvaadin.mailexample.inbox;
+package com.mvpvaadin.mailexample.outbox;
 
 import java.util.Date;
 import java.util.List;
 
+import com.mvpvaadin.event.Event;
 import com.mvpvaadin.event.EventBus;
 import com.mvpvaadin.event.EventHandler;
 import com.mvpvaadin.mailexample.data.Mail;
@@ -15,51 +16,44 @@ import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
-public class InboxViewImpl extends Table implements InboxView{
+public class OutboxViewImpl extends Table implements OutboxView{
+	
+	private static final long serialVersionUID = 13527913492359998L;
 
-	private static final long serialVersionUID = 2375843281754049077L;
-	
-	private NavigateableView parent;
 	private EventBus eventBus;
+	private User user;
 	
-	private InboxPresenter presenter;
+	private OutboxPresenter presenter;
 	
-	public InboxViewImpl(NavigateableView parent, EventBus eventBus, User user){
-	
-		this.parent = parent;
+	public OutboxViewImpl(EventBus eventBus, User user){
 		this.eventBus = eventBus;
+		this.user = user;
+		
 		generateUI();
 		
-		presenter = new InboxPresenter(this, eventBus, user, MailService.getInstance());
+		presenter = new OutboxPresenter(this, eventBus, MailService.getInstance(), user);
 	}
 	
 	
-	public NavigateableView getParentView() {
-		return parent;
-	}
-
 	public String getUriFragment() {
-		return "inbox";
+		return "outbox";
 	}
 
 	public String getBreadcrumbTitle() {
-		return "Inbox";
+		return "Outbox";
 	}
 
-	public void fireEventToShowThisView() {
-		eventBus.fireEvent(new ShowInboxViewEvent());
-	}
 	
-	
+
 	private Object[] generateObjectArrayFromMail(Mail m){
 		Object[] ret = new Object[3];
 		
-		String receiver = m.getSender();
+		String receiver = m.getReceiver();
 		if (!m.isRead())
-			receiver = "<b>"+m.getSender()+"</b>";
+			receiver = "<b>"+m.getReceiver()+"</b>";
 		
 		ret[0]= new Label(receiver, Label.CONTENT_XHTML);
-	
+		
 		String subject= m.getSubject();
 		if (!m.isRead())
 			subject = "<b>"+m.getSubject()+"</b>";
@@ -82,7 +76,7 @@ public class InboxViewImpl extends Table implements InboxView{
 	
 	private void generateUI(){
 		// Define the names and data types of columns.
-		this.addContainerProperty("From", Label.class, null);
+		this.addContainerProperty("To", Label.class, null);
 		this.addContainerProperty("Subject", Label.class, null);
 		this.addContainerProperty("Date", Date.class, null);
 		this.setImmediate(true);
@@ -94,24 +88,21 @@ public class InboxViewImpl extends Table implements InboxView{
 			private static final long serialVersionUID = 6532912566842143136L;
 
 			public void itemClick(ItemClickEvent event) {
-				
+			/*	
 				Mail mail = (Mail) event.getItemId();
-				eventBus.fireEvent(new ShowReadMailEvent(mail));
+			*/
 			}
 		});
-		
-	}
 
+}
 
 	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
-		return new ShowInboxViewEvent();
+		return new ShowOutboxEvent();
 	}
 
-
-	public InboxPresenter getPresenter() {
+	
+	public OutboxPresenter getPresenter(){
 		return presenter;
 	}
 	
-	
-
 }

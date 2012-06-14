@@ -21,7 +21,7 @@ public class ShowReadMailEvent extends Event<ShowReadMailRequiredHandler>{
 
 	@Override
 	public void dispatch(ShowReadMailRequiredHandler handler) {
-		handler.onMailReviewRequired(mail);
+		handler.onReadMailRequired(mail);
 	}
 	
 

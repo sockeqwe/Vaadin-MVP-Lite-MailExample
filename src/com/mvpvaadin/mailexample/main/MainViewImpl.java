@@ -4,13 +4,25 @@ import java.io.Serializable;
 
 import com.mvpvaadin.event.EventBus;
 import com.mvpvaadin.event.EventHandler;
+import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
+import com.mvpvaadin.mailexample.inbox.InboxViewImpl;
+import com.mvpvaadin.mailexample.inbox.ShowInboxViewEvent;
+import com.mvpvaadin.mailexample.inbox.ShowInboxViewRequiredHandler;
 import com.mvpvaadin.mailexample.login.LogoutEvent;
+import com.mvpvaadin.mailexample.outbox.OutboxViewImpl;
+import com.mvpvaadin.mailexample.outbox.ShowOutboxEvent;
+import com.mvpvaadin.mailexample.outbox.ShowOutboxHandler;
+import com.mvpvaadin.mailexample.readmail.ReadMailViewImpl;
+import com.mvpvaadin.mailexample.readmail.ShowReadMailEvent;
+import com.mvpvaadin.mailexample.readmail.ShowReadMailRequiredHandler;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.statistics.ShowStatisticsViewEvent;
 import com.mvpvaadin.mailexample.statistics.ShowStatisticsViewHandler;
 import com.mvpvaadin.mailexample.statistics.StatisticsViewImpl;
-import com.mvpvaadin.view.NavigateableView;
+import com.mvpvaadin.mailexample.writemail.ShowWriteMailEvent;
+import com.mvpvaadin.mailexample.writemail.ShowWriteMailHandler;
+import com.mvpvaadin.mailexample.writemail.WriteMailViewImpl;
 import com.mvpvaadin.view.NavigationController;
 import com.mvpvaadin.view.ui.Breadcrumbs;
 import com.vaadin.ui.Alignment;
@@ -20,10 +32,16 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Runo;
 
-public class MainViewImpl extends VerticalLayout implements MainView, Serializable, NavigateableView,
-															ShowStatisticsViewHandler{
+public class MainViewImpl extends VerticalLayout implements MainView, Serializable,
+															ShowStatisticsViewHandler,
+															ShowInboxViewRequiredHandler,
+															ShowReadMailRequiredHandler,
+															ShowOutboxHandler,
+															ShowWriteMailHandler{
 
 	private static final long serialVersionUID = -8755323074558632618L;
 	
@@ -35,10 +53,15 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	
 	private VerticalLayout subViewContainer;
 	
-	private VerticalLayout startView;
+	private Panel startView;
 	
 	// Subviews
-	private StatisticsViewImpl welcomeView;
+	private StatisticsViewImpl statisticsView;
+	private InboxViewImpl inboxView;
+	private ReadMailViewImpl readMailView;
+	private OutboxViewImpl outboxView;
+	
+	private WriteMailViewImpl writeMailView;
 	
 	
 	
@@ -58,6 +81,10 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	
 	private void bind(){
 		eventBus.addHandler(ShowStatisticsViewEvent.TYPE, this);
+		eventBus.addHandler(ShowInboxViewEvent.TYPE, this);
+		eventBus.addHandler(ShowReadMailEvent.TYPE, this);
+		eventBus.addHandler(ShowOutboxEvent.TYPE, this);
+		eventBus.addHandler(ShowWriteMailEvent.TYPE, this);
 	}
 	
 	
@@ -77,7 +104,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		header.setWidth("100%");
 		header.addStyleName("header");
 		
-		Label logoLabel = new Label("&nbsp;&nbsp; Mail MVP Example",Label.CONTENT_XHTML);
+		Label logoLabel = new Label("&nbsp; Mail MVP Example",Label.CONTENT_XHTML);
 		logoLabel.setStyleName("h1");
 		
 		
@@ -100,12 +127,36 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		
 		inboxButton = new Button("inbox");
 		inboxButton.setStyleName("default");
+		inboxButton.addListener(new ClickListener() {
+			
+			private static final long serialVersionUID = 1L;
+
+			public void buttonClick(ClickEvent event) {
+				eventBus.fireEvent(new ShowInboxViewEvent());
+			}
+		});
 		
 		Button outboxButton = new Button("outbox");
 		outboxButton.setStyleName("default");
+		outboxButton.addListener(new ClickListener() {
+			
+			private static final long serialVersionUID = 315579969624810150L;
+
+			public void buttonClick(ClickEvent event) {
+				eventBus.fireEvent(new ShowOutboxEvent());
+			}
+		});
 		
 		Button writeMail = new Button("new mail");
 		writeMail.setStyleName("default");
+		writeMail.addListener(new ClickListener() {
+			
+			private static final long serialVersionUID = -1959036904032811749L;
+
+			public void buttonClick(ClickEvent event) {
+				eventBus.fireEvent(new ShowWriteMailEvent());
+			}
+		});
 		
 		Button statisticsButton = new Button("statistics");
 		statisticsButton.setStyleName("default");
@@ -186,12 +237,12 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	
 	public void showStartSubView(){
 		if (startView == null){
-			startView = new VerticalLayout();
+			startView = new Panel("Welcome");
+			startView.setStyleName(Runo.PANEL_LIGHT);
+			startView.addStyleName("panelWhite");
+			startView.setSizeFull();
 			
-			Label title = new Label("Welcome "+user.getUsername());
-			title.setStyleName("h2");
-			startView.addComponent(title);
-			startView.addComponent(new Label("Use the main menu"));
+			startView.addComponent(new Label("Hi "+user.getUsername()+", <br />use the main menu", Label.CONTENT_XHTML));
 		}
 		
 		setSubview(startView);
@@ -200,16 +251,65 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	}
 	
 	public void onShowWelcomeViewRequired() {
-		if (welcomeView == null)
-			welcomeView = new StatisticsViewImpl(this, eventBus, user);
+		if (statisticsView == null)
+			statisticsView = new StatisticsViewImpl(this, eventBus, user);
 		
-		setSubview(welcomeView);
-		navigationController.setCurrentView(welcomeView);
+		setSubview(statisticsView);
+		navigationController.setCurrentView(statisticsView);
 	}
 
 
 	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
 		return new ShowMainViewEvent();
+	}
+
+
+	public void onReadMailRequired(Mail mail) {
+		
+		if (readMailView == null)
+			readMailView = new ReadMailViewImpl(inboxView, eventBus, user);
+		
+		readMailView.setMail(mail);
+		
+		setSubview(readMailView);
+		navigationController.setCurrentView(readMailView);
+	}
+
+
+	public void onShowInboxViewRequired() {
+		if (inboxView == null)
+			inboxView = new InboxViewImpl(this, eventBus, user);
+		
+		inboxView.getPresenter().refreshMails();
+		setSubview(inboxView);
+		navigationController.setCurrentView(inboxView);
+	}
+
+
+	public void onShowOutboxRequired() {
+		if (outboxView == null)
+			outboxView = new OutboxViewImpl(eventBus, user);
+		
+		outboxView.getPresenter().refreshList();
+		setSubview(outboxView);
+		navigationController.setCurrentView(outboxView);
+	}
+
+
+	public void onShowWriteMailViewRequired(String receiverMailAddress,
+			String subject) {
+		if (writeMailView == null){
+			writeMailView = new WriteMailViewImpl(eventBus, user, MailService.getInstance());
+		}
+		
+		if (receiverMailAddress != null) 
+			writeMailView.setReceiverMailAddress(receiverMailAddress);
+		
+		if (subject != null)
+			writeMailView.setSubject(subject);
+		
+		getWindow().addWindow(writeMailView);
+		
 	}
 	
 		
