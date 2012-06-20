@@ -68,6 +68,7 @@ public class WriteMailViewImpl extends Window implements WriteMailView{
 		layout.setComponentAlignment(sendButton, Alignment.MIDDLE_CENTER);
 		
 		this.setContent(layout);
+		this.setModal(true);
 		this.center();
 	}
 

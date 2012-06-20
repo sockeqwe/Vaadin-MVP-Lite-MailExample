@@ -145,11 +145,11 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		else
 			readButton.setCaption("mark as read");
 		
-		fromLabel.setCaption("<b>From:</b> "+mail.getSender());
-		toLabel.setCaption("<b>To:</b> "+mail.getReceiver());
-		dateLabel.setCaption("<b>Date:</b> "+mail.getDate());
-		subjectLabel.setCaption("<b>Subject:</b> "+mail.getSubject());
-		messageBodyLabel.setCaption(mail.getMessage());
+		fromLabel.setValue("<b>From:</b> "+mail.getSender());
+		toLabel.setValue("<b>To:</b> "+mail.getReceiver());
+		dateLabel.setValue("<b>Date:</b> "+mail.getDate());
+		subjectLabel.setValue("<b>Subject:</b> "+mail.getSubject());
+		messageBodyLabel.setValue(mail.getMessage());
 		
 		
 		fromLabel.setContentMode(Label.CONTENT_XHTML);

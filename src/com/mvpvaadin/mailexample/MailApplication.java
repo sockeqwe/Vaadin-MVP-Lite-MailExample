@@ -32,6 +32,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	public void init() {
 		bind();
 		setTheme("MailTheme");
+		navigationController.setShowErrorMessageOnUnknownUriFragment(false);
 		
 		
 		// Instantiate LoginView
