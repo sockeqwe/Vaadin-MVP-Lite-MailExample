@@ -1,38 +1,30 @@
 package com.mvpvaadin.mailexample.service;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 
-public class MailService {
+public class MailService  implements Serializable{
 	
-	private static MailService INSTANCE = new MailService();
+	private static final long serialVersionUID = 4311641059640246505L;
 	
-	private Map<Integer, List<Mail> > inboxMailStorage;
-	private Map<Integer, List<Mail>> outboxMailStorage;
+	private List<Mail> inboxMailStorage;
+	private List<Mail> outboxMailStorage;
 	
 	private String [] emails = {"tom@mail.com", "daniel@mail.com", "monica@mail.com", "simon@mail.com", "amy@mail.com", "maria@mail.com"};
 	private String [] subjects = {"Meeting", "Dinner", "Launch", "Hello", "Party", "Spam"};
 	private String msgBody = "Hello, this is a simple message body text.";
 	
 	
-	private MailService(){
+	public MailService(){
 		
-		inboxMailStorage = new ConcurrentHashMap<Integer, List<Mail>>();
-		outboxMailStorage = new ConcurrentHashMap<Integer, List<Mail>>();
 	}
-	
-	
-	public static MailService getInstance(){
-		return INSTANCE;
-	}
-	
+
 	/**
 	 * Generate mails
 	 * @param user
@@ -62,6 +54,7 @@ public class MailService {
 			Date date = new Date();
 			date.setTime(date.getTime()-rand.nextInt(1209600000));
 			Mail m = new Mail(sender, receiver, subject, msgBody, date);
+			m.setId(i);
 			mails.add(m);
 		}
 		
@@ -106,15 +99,14 @@ public class MailService {
 	 */
 	public List<Mail> getInboxMailsOf(User user){
 
-		List<Mail> mails = inboxMailStorage.get(user.getId());
 		
-		if (mails == null)
+		if (inboxMailStorage == null)
 		{
-			mails = generateRandomMails(user, true);
-			inboxMailStorage.put(user.getId(), mails);
+			inboxMailStorage = generateRandomMails(user, true);
+			
 		}
 		
-		return mails;
+		return inboxMailStorage;
 	}
 	
 	
@@ -127,15 +119,13 @@ public class MailService {
 	 */
 	public List<Mail> getOutboxMailsOf(User user){
 
-		List<Mail> mails = outboxMailStorage.get(user.getId());
 		
-		if (mails == null)
+		if (outboxMailStorage == null)
 		{
-			mails = generateRandomMails(user, false);
-			outboxMailStorage.put(user.getId(), mails);
+			outboxMailStorage = generateRandomMails(user, false);
 		}
 		
-		return mails;
+		return outboxMailStorage;
 	}
 	
 	
@@ -145,10 +135,7 @@ public class MailService {
 	 * @param mail
 	 */
 	public void sendMail(User sender, Mail mail){
-		
-		List<Mail> mails = getOutboxMailsOf(sender);
-		mails.add(mail);
-		
+		outboxMailStorage.add(mail);	
 	}
 	
 	
@@ -158,8 +145,8 @@ public class MailService {
 	 * @param user
 	 */
 	public void deleteAllMailsOf(User user){
-		inboxMailStorage.remove(user.getId());
-		outboxMailStorage.remove(user.getId());
+		inboxMailStorage.clear();
+		outboxMailStorage.clear();
 	}
 	
 

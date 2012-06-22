@@ -33,6 +33,10 @@ public class MainPresenter extends Presenter<MainView> implements UnreadCountCha
 	public void onUnreadCountChanged(int newUnreadValue) {
 		getView().setInboxUnreadCount(newUnreadValue);
 	}
+
+	public MailService getMailService() {
+		return mailService;
+	}
 	
 	
 	

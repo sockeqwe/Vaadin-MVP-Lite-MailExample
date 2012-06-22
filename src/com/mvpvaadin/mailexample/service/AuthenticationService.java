@@ -45,7 +45,7 @@ public class AuthenticationService {
 	 */
 	public void doLogout(User user){
 		// simulate a logout
-		MailService.getInstance().deleteAllMailsOf(user);
+		
 	}
 
 }

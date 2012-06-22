@@ -3,6 +3,7 @@ package com.mvpvaadin.mailexample.statistics;
 import com.mvpvaadin.event.EventBus;
 import com.mvpvaadin.event.EventHandler;
 import com.mvpvaadin.mailexample.data.User;
+import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.view.NavigateableView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -22,13 +23,14 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 	
 	private StatisticsPresenter presenter;
 	
-	public StatisticsViewImpl(NavigateableView parent, EventBus eventBus, User user){
+	public StatisticsViewImpl(NavigateableView parent, EventBus eventBus, 
+			User user, MailService service){
 		this.parent = parent;
 		
 		// Important to instantiate all UI components, before creating the presenter, because the presenter set
 		generateUI(); 
 		
-		presenter = new StatisticsPresenter(this, eventBus, user);
+		presenter = new StatisticsPresenter(this, eventBus, user, service);
 		
 	}
 	

@@ -24,7 +24,6 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 	private EventBus eventBus;
 	private ReadMailPresenter presenter;
 	private NavigateableView parent;
-	private Mail mail;
 	
 	private Button readButton;
 	private Label fromLabel;
@@ -34,9 +33,10 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 	private Label messageBodyLabel;
 	
 	
-	public ReadMailViewImpl(NavigateableView parent, EventBus eventBus, User user){
+	public ReadMailViewImpl(NavigateableView parent, EventBus eventBus, 
+			User user, MailService mailService){
 		this.eventBus = eventBus;
-		presenter = new ReadMailPresenter(this, eventBus, user, MailService.getInstance());
+		presenter = new ReadMailPresenter(this, eventBus, user, mailService);
 		this.parent = parent;
 		generateUI();
 	}
@@ -53,12 +53,12 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 			private static final long serialVersionUID = 960166525199315579L;
 
 			public void buttonClick(ClickEvent event) {
-				if(mail.isRead()){
-					presenter.markMailAsUnread(mail);
+				if(presenter.getCurrentMail().isRead()){
+					presenter.markMailAsUnread();
 					readButton.setCaption("mark as unread");
 				}
 				else{
-					presenter.markMailAsRead(mail);
+					presenter.markMailAsRead();
 					readButton.setCaption("mark as read");
 				}
 			}
@@ -72,7 +72,9 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 			private static final long serialVersionUID = 960166525199315579L;
 
 			public void buttonClick(ClickEvent event) {
-				eventBus.fireEvent(new ShowWriteMailEvent(mail.getSender(), "RE: "+mail.getSubject()));
+				eventBus.fireEvent(new ShowWriteMailEvent(
+						presenter.getCurrentMail().getSender(), 
+						"RE: "+presenter.getCurrentMail().getSubject()));
 			}
 		});
 	
@@ -127,18 +129,18 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 	}
 
 	public String getUriFragment() {
-		return "mail";
+		return ""+presenter.getCurrentMail().getId();
 	}
 
 	public String getBreadcrumbTitle() {
-		return mail.getSubject();
+		return presenter.getCurrentMail().getSubject();
 	}
 
 	public void setMail(Mail mail) {
-		this.mail = mail;
+		
 		this.setCaption(mail.getSubject());
 		
-		presenter.markMailAsRead(mail);
+		presenter.markMailAsRead();
 		
 		if (mail.isRead())
 			readButton.setCaption("mark as unread");
@@ -151,7 +153,6 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		subjectLabel.setValue("<b>Subject:</b> "+mail.getSubject());
 		messageBodyLabel.setValue(mail.getMessage());
 		
-		
 		fromLabel.setContentMode(Label.CONTENT_XHTML);
 		toLabel.setContentMode(Label.CONTENT_XHTML);
 		dateLabel.setContentMode(Label.CONTENT_XHTML);
@@ -159,11 +160,14 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		messageBodyLabel.setContentMode(Label.CONTENT_XHTML);
 		
 		
-		
 	}
 
 	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
-		return new ShowReadMailEvent(mail);
+		return new ShowReadMailEvent(presenter.getCurrentMail());
+	}
+
+	public ReadMailPresenter getPresenter() {
+		return presenter;
 	}
 
 }

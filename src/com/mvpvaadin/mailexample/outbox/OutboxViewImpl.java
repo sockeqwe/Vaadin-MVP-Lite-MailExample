@@ -25,13 +25,13 @@ public class OutboxViewImpl extends Table implements OutboxView{
 	
 	private OutboxPresenter presenter;
 	
-	public OutboxViewImpl(EventBus eventBus, User user){
+	public OutboxViewImpl(EventBus eventBus, User user, MailService mailService){
 		this.eventBus = eventBus;
 		this.user = user;
 		
 		generateUI();
 		
-		presenter = new OutboxPresenter(this, eventBus, MailService.getInstance(), user);
+		presenter = new OutboxPresenter(this, eventBus, mailService, user);
 	}
 	
 	

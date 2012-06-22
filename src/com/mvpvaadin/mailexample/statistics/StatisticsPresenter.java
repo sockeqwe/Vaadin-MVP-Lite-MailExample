@@ -15,22 +15,31 @@ public class StatisticsPresenter extends Presenter<StatisticsView> implements Un
 	private static final long serialVersionUID = -7907450349081515874L;
 	
 	private User user;
+	private MailService service;
 	
-	public StatisticsPresenter(StatisticsView view, EventBus eventBus, User user) {
+	public StatisticsPresenter(StatisticsView view, EventBus eventBus, 
+			User user, MailService mailService) {
 		super(view, eventBus);
 		this.user = user;
+		this.service = mailService;
 		
-		getEventBus().addHandler(UnreadCountChangedEvent.TYPE, this);
-		getEventBus().addHandler(NewMailInOutboxEvent.TYPE, this);
-		
-		// set the initial displaying data
-		getView().setUnreadMailsCount(MailService.getInstance().getUnreadInboxCountOf(user));
-		getView().setUsername(user.getUsername());
-		getView().setEmailAddress(user.getEmailAddress());
-		getView().setOutboxMailCount(MailService.getInstance().getOutboxCountOf(user));
+		bind();
 		
 	}
 	
+	
+	private void bind(){
+		getEventBus().addHandler(UnreadCountChangedEvent.TYPE, this);
+		getEventBus().addHandler(NewMailInOutboxEvent.TYPE, this);
+	}
+	
+	
+	public void refreshStatistics(){
+		getView().setUnreadMailsCount(service.getUnreadInboxCountOf(user));
+		getView().setUsername(user.getUsername());
+		getView().setEmailAddress(user.getEmailAddress());
+		getView().setOutboxMailCount(service.getOutboxCountOf(user));
+	}
 	
 
 	public void onUnreadCountChanged(int newUnreadValue) {
@@ -40,7 +49,7 @@ public class StatisticsPresenter extends Presenter<StatisticsView> implements Un
 
 
 	public void onNewMailInOutbox(Mail mail) {
-		getView().setOutboxMailCount(MailService.getInstance().getOutboxCountOf(user));
+		getView().setOutboxMailCount(service.getOutboxCountOf(user));
 	}
 	
 	

@@ -5,6 +5,6 @@ import com.mvpvaadin.event.EventHandler;
 
 public interface ShowStatisticsViewHandler extends EventHandler {
 	
-	public void onShowWelcomeViewRequired();
+	public void onShowStatisticsViewRequired();
 
 }

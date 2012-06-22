@@ -22,15 +22,17 @@ public class InboxViewImpl extends Table implements InboxView{
 	private NavigateableView parent;
 	private EventBus eventBus;
 	
+	
 	private InboxPresenter presenter;
 	
-	public InboxViewImpl(NavigateableView parent, EventBus eventBus, User user){
+	public InboxViewImpl(NavigateableView parent, EventBus eventBus, 
+			User user, MailService service){
 	
 		this.parent = parent;
 		this.eventBus = eventBus;
 		generateUI();
 		
-		presenter = new InboxPresenter(this, eventBus, user, MailService.getInstance());
+		presenter = new InboxPresenter(this, eventBus, user, service);
 	}
 	
 	

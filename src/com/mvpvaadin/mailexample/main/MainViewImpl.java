@@ -48,7 +48,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	private NavigationController navigationController;
 	private EventBus eventBus ;
 	private User user;
-	private MainPresenter mainPresenter;
+	private MainPresenter presenter;
 	private Button inboxButton;
 	
 	private VerticalLayout subViewContainer;
@@ -61,18 +61,21 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	private ReadMailViewImpl readMailView;
 	private OutboxViewImpl outboxView;
 	
+	// Other View
 	private WriteMailViewImpl writeMailView;
 	
 	
 	
-	public MainViewImpl(User user, EventBus eventBus, NavigationController navigationController){
+	public MainViewImpl(User user, EventBus eventBus, 
+			NavigationController navigationController, MailService mailService){
 		this.eventBus = eventBus;
 		this.navigationController = navigationController;
 		this.user = user;
 
 		generateUI();
 		
-		this.mainPresenter = new MainPresenter(this, eventBus, user, MailService.getInstance());
+		this.presenter = new MainPresenter(this, eventBus, user, mailService);
+		
 		bind();
 		this.setSizeFull();
 		
@@ -250,9 +253,11 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		
 	}
 	
-	public void onShowWelcomeViewRequired() {
+	public void onShowStatisticsViewRequired() {
 		if (statisticsView == null)
-			statisticsView = new StatisticsViewImpl(this, eventBus, user);
+			statisticsView = new StatisticsViewImpl(this, eventBus, user, presenter.getMailService());
+		
+		statisticsView.getPresenter().refreshStatistics();
 		
 		setSubview(statisticsView);
 		navigationController.setCurrentView(statisticsView);
@@ -267,9 +272,9 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	public void onReadMailRequired(Mail mail) {
 		
 		if (readMailView == null)
-			readMailView = new ReadMailViewImpl(inboxView, eventBus, user);
+			readMailView = new ReadMailViewImpl(inboxView, eventBus, user, presenter.getMailService());
 		
-		readMailView.setMail(mail);
+		readMailView.getPresenter().setMail(mail);
 		
 		setSubview(readMailView);
 		navigationController.setCurrentView(readMailView);
@@ -278,7 +283,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 
 	public void onShowInboxViewRequired() {
 		if (inboxView == null)
-			inboxView = new InboxViewImpl(this, eventBus, user);
+			inboxView = new InboxViewImpl(this, eventBus, user, presenter.getMailService());
 		
 		inboxView.getPresenter().refreshMails();
 		setSubview(inboxView);
@@ -288,7 +293,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 
 	public void onShowOutboxRequired() {
 		if (outboxView == null)
-			outboxView = new OutboxViewImpl(eventBus, user);
+			outboxView = new OutboxViewImpl(eventBus, user,  presenter.getMailService());
 		
 		outboxView.getPresenter().refreshList();
 		setSubview(outboxView);
@@ -299,7 +304,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	public void onShowWriteMailViewRequired(String receiverMailAddress,
 			String subject) {
 		if (writeMailView == null){
-			writeMailView = new WriteMailViewImpl(eventBus, user, MailService.getInstance());
+			writeMailView = new WriteMailViewImpl(eventBus, user,  presenter.getMailService());
 		}
 		
 		if (receiverMailAddress != null) 

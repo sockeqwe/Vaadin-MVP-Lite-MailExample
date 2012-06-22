@@ -22,7 +22,7 @@ public class ShowStatisticsViewEvent extends Event<ShowStatisticsViewHandler>{
 
 	@Override
 	public void dispatch(ShowStatisticsViewHandler handler) {
-		handler.onShowWelcomeViewRequired();
+		handler.onShowStatisticsViewRequired();
 	}
 	
 	

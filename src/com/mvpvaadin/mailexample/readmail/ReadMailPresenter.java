@@ -16,6 +16,7 @@ public class ReadMailPresenter extends Presenter<ReadMailView>
 	
 	private MailService service;
 	private User user;
+	private Mail currentMail;
 	
 	public ReadMailPresenter(ReadMailView view, EventBus eventBus, User user, MailService service) {
 		super(view, eventBus);
@@ -25,14 +26,15 @@ public class ReadMailPresenter extends Presenter<ReadMailView>
 	
 	
 	public void setMail(Mail mail){
+		this.currentMail = mail;
 		getView().setMail(mail);
 	}
 
 	
-	public void markMailAsRead(Mail mail){
-		if (!mail.isRead())
+	public void markMailAsRead(){
+		if (!currentMail.isRead())
 		{
-			mail.setRead(true);
+			currentMail.setRead(true);
 			int unreadCount = service.getUnreadInboxCountOf(user);
 			
 			getEventBus().fireEvent(new UnreadCountChangedEvent(unreadCount));
@@ -41,13 +43,18 @@ public class ReadMailPresenter extends Presenter<ReadMailView>
 	}
 	
 	
-	public void markMailAsUnread(Mail mail){
-		if (mail.isRead())
+	public void markMailAsUnread(){
+		if (currentMail.isRead())
 		{
-			mail.setRead(false);
+			currentMail.setRead(false);
 			int unreadCount = service.getUnreadInboxCountOf(user);
 			getEventBus().fireEvent(new UnreadCountChangedEvent(unreadCount));
 		}
+	}
+
+
+	public Mail getCurrentMail() {
+		return currentMail;
 	}
 
 	

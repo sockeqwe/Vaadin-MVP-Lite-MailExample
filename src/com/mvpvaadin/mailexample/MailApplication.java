@@ -11,6 +11,7 @@ import com.mvpvaadin.mailexample.main.MainViewImpl;
 import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
 import com.mvpvaadin.mailexample.main.ShowMainViewHandler;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
+import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.view.NavigationController;
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
@@ -25,6 +26,8 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	private LoginViewImpl loginView;
 	private Window mainWindow;
 	private MainViewImpl mainView;
+	
+	private MailService mailService = new MailService();
 	
 	private User authenticatedUser;
 	
@@ -71,7 +74,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	private void showMainView(){
 		
 		if (mainView == null)
-			mainView = new MainViewImpl(authenticatedUser, eventBus, navigationController);
+			mainView = new MainViewImpl(authenticatedUser, eventBus, navigationController, mailService);
 		
 		
 		if (mainWindow == null)
