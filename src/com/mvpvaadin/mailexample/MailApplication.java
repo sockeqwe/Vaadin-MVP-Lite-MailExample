@@ -66,8 +66,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 		loginView.clearForm();
 		removeWindow(mainWindow);
 		setMainWindow(loginView);
-		
-		reloadPage();
+		this.close();
 	}
 
 	
@@ -99,12 +98,12 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	
 	/**
 	 * reloads the page with removing all "#" tags
-	 */
+	
 	private void reloadPage(){
 		String js = "var url = location.href.split(\"#\")[0];" +
 				"window.location.href = url;";
 		
 		getMainWindow().executeJavaScript(js);
 	}
-
+ */
 }
