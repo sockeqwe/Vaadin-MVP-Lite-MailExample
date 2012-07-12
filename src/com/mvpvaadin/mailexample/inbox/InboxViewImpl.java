@@ -3,13 +3,14 @@ package com.mvpvaadin.mailexample.inbox;
 import java.util.Date;
 import java.util.List;
 
-import com.mvpvaadin.event.EventBus;
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventBus;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.ShowViewEventHandler;
+import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.readmail.ShowReadMailEvent;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvpvaadin.view.NavigateableView;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Label;
@@ -105,7 +106,7 @@ public class InboxViewImpl extends Table implements InboxView{
 	}
 
 
-	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
+	public ShowViewEvent <? extends ShowViewEventHandler> getEventToShowThisView() {
 		return new ShowInboxViewEvent();
 	}
 

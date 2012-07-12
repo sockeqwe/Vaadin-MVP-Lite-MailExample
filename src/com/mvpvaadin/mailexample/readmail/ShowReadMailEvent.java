@@ -1,10 +1,10 @@
 package com.mvpvaadin.mailexample.readmail;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.Mail;
 
-public class ShowReadMailEvent extends Event<ShowReadMailRequiredHandler>{
+public class ShowReadMailEvent extends ShowViewEvent<ShowReadMailRequiredHandler>{
 
 	public static final EventType<ShowReadMailRequiredHandler> TYPE = new EventType<ShowReadMailRequiredHandler>();
 	

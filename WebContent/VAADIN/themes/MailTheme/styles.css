@@ -44,3 +44,9 @@
 .breadcrumbs .breadcrumb-element.v-label {
     line-height: 24px;	
 }
+
+.outboxDetailView{
+	background-color: white;
+	padding: 5px 5px;
+
+}

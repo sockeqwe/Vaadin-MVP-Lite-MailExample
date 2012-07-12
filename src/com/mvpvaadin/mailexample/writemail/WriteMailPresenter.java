@@ -2,12 +2,12 @@ package com.mvpvaadin.mailexample.writemail;
 
 import java.util.Date;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxEvent;
-import com.mvpvaadin.presenter.Presenter;
+import com.mvplite.presenter.Presenter;
 
 public class WriteMailPresenter extends Presenter<WriteMailView>{
 

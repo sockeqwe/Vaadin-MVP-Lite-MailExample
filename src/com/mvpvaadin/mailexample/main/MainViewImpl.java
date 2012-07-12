@@ -2,8 +2,11 @@ package com.mvpvaadin.mailexample.main;
 
 import java.io.Serializable;
 
-import com.mvpvaadin.event.EventBus;
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventBus;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.ShowViewEventHandler;
+import com.mvplite.view.NavigationController;
+import com.mvplite.view.ui.Breadcrumbs;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.inbox.InboxViewImpl;
@@ -23,8 +26,6 @@ import com.mvpvaadin.mailexample.statistics.StatisticsViewImpl;
 import com.mvpvaadin.mailexample.writemail.ShowWriteMailEvent;
 import com.mvpvaadin.mailexample.writemail.ShowWriteMailHandler;
 import com.mvpvaadin.mailexample.writemail.WriteMailViewImpl;
-import com.mvpvaadin.view.NavigationController;
-import com.mvpvaadin.view.ui.Breadcrumbs;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -264,7 +265,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	}
 
 
-	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
+	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
 		return new ShowMainViewEvent();
 	}
 
@@ -293,7 +294,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 
 	public void onShowOutboxRequired() {
 		if (outboxView == null)
-			outboxView = new OutboxViewImpl(eventBus, user,  presenter.getMailService());
+			outboxView = new OutboxViewImpl(eventBus, user,  presenter.getMailService(), navigationController);
 		
 		outboxView.getPresenter().refreshList();
 		setSubview(outboxView);

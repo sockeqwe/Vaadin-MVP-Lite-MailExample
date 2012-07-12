@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.writemail;
 
-import com.mvpvaadin.view.View;
+import com.mvplite.view.View;
 
 public interface WriteMailView extends View{
 	public void showSuccessfulMessage();

@@ -1,11 +1,11 @@
 package com.mvpvaadin.mailexample.inbox;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedHandler;
-import com.mvpvaadin.presenter.Presenter;
+import com.mvplite.presenter.Presenter;
 
 public class InboxPresenter extends Presenter<InboxView> implements UnreadCountChangedHandler{
 

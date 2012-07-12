@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.view.NavigateableSubView;
+import com.mvplite.view.NavigateableSubView;
 
 public interface StatisticsView extends NavigateableSubView{
 	

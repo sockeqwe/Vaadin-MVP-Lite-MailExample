@@ -3,37 +3,53 @@ package com.mvpvaadin.mailexample.outbox;
 import java.util.Date;
 import java.util.List;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventBus;
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventBus;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.ShowViewEventHandler;
+import com.mvplite.view.NavigationController;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
-import com.mvpvaadin.mailexample.readmail.ShowReadMailEvent;
+import com.mvpvaadin.mailexample.outbox.ui.SelectHintView;
+import com.mvpvaadin.mailexample.outboxmaildetails.OutboxMailDetailsViewImpl;
+import com.mvpvaadin.mailexample.outboxmaildetails.ShowOutboxMailDetailsEvent;
+import com.mvpvaadin.mailexample.outboxmaildetails.ShowOutboxMailDetailsHandler;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvpvaadin.view.NavigateableView;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalSplitPanel;
 
-public class OutboxViewImpl extends Table implements OutboxView{
+public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
+																ShowOutboxMailDetailsHandler{
 	
 	private static final long serialVersionUID = 13527913492359998L;
 
 	private EventBus eventBus;
-	private User user;
-	
+	private NavigationController navigationController;
 	private OutboxPresenter presenter;
 	
-	public OutboxViewImpl(EventBus eventBus, User user, MailService mailService){
+	private Table mailTable;
+	private SelectHintView selectHintView;
+	
+	// SubViews
+	private OutboxMailDetailsViewImpl mailDetailsView;
+	
+	public OutboxViewImpl(EventBus eventBus, User user, MailService mailService, NavigationController controller){
 		this.eventBus = eventBus;
-		this.user = user;
-		
+		this.navigationController = controller;
 		generateUI();
+		bind();
 		
 		presenter = new OutboxPresenter(this, eventBus, mailService, user);
 	}
 	
+	private void bind(){
+		eventBus.addHandler(ShowOutboxMailDetailsEvent.TYPE, this);
+	}
 	
 	public String getUriFragment() {
 		return "outbox";
@@ -66,43 +82,74 @@ public class OutboxViewImpl extends Table implements OutboxView{
 
 	public void setMails(List<Mail> mails) {
 		
-		this.removeAllItems();
+		mailTable.removeAllItems();
 		
 		for (Mail m : mails)
-			addItem(generateObjectArrayFromMail(m), m);
+			mailTable.addItem(generateObjectArrayFromMail(m), m);
 		
 	}
 	
 	
 	private void generateUI(){
-		// Define the names and data types of columns.
-		this.addContainerProperty("To", Label.class, null);
-		this.addContainerProperty("Subject", Label.class, null);
-		this.addContainerProperty("Date", Date.class, null);
-		this.setImmediate(true);
+		
+		selectHintView = new SelectHintView("top");
+		
 		this.setSizeFull();
-		this.setColumnReorderingAllowed(true);
-		this.setColumnCollapsingAllowed(true);
-		this.addListener(new ItemClickListener() {
+		mailTable = new Table();
+		
+		// Define the names and data types of columns.
+		mailTable.addContainerProperty("To", Label.class, null);
+		mailTable.addContainerProperty("Subject", Label.class, null);
+		mailTable.addContainerProperty("Date", Date.class, null);
+		mailTable.setImmediate(true);
+		mailTable.setSizeFull();
+		mailTable.setColumnReorderingAllowed(true);
+		mailTable.setColumnCollapsingAllowed(true);
+		mailTable.setSelectable(true);
+		mailTable.addListener(new Property.ValueChangeListener() {
 			
-			private static final long serialVersionUID = 6532912566842143136L;
+			private static final long serialVersionUID = -2985353369890003897L;
 
-			public void itemClick(ItemClickEvent event) {
-			/*	
-				Mail mail = (Mail) event.getItemId();
-			*/
+			public void valueChange(ValueChangeEvent event) {
+				Mail mail = (Mail) event.getProperty().getValue();
+				eventBus.fireEvent(new ShowOutboxMailDetailsEvent(mail));
 			}
 		});
 
+		
+		this.setFirstComponent(mailTable);
+		this.setSecondComponent(selectHintView);
+		this.setSplitPosition(50, Sizeable.UNITS_PERCENTAGE);
+		
+		
 }
 
-	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
+	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
 		return new ShowOutboxEvent();
 	}
 
 	
 	public OutboxPresenter getPresenter(){
 		return presenter;
+	}
+
+
+	public void onShowOutboxMailDetailsRequired(Mail mail) {
+		
+		if (mail == null){
+			this.setSecondComponent(selectHintView);
+			navigationController.setCurrentView(this);
+		}
+		else
+		{
+			if (mailDetailsView == null)
+				mailDetailsView = new OutboxMailDetailsViewImpl(eventBus, this);
+			
+			mailDetailsView.getPresenter().setMail(mail);
+			navigationController.setCurrentView(mailDetailsView);
+			this.setSecondComponent(mailDetailsView);
+		}
+		
 	}
 	
 }

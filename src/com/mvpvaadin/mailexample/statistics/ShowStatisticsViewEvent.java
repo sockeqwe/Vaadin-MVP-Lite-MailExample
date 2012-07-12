@@ -1,14 +1,14 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.EventType;
+import com.mvplite.event.ShowViewEvent;
 
 
 /**
  * This is event is fired, to display the welcome view
  * 
  */
-public class ShowStatisticsViewEvent extends Event<ShowStatisticsViewHandler>{
+public class ShowStatisticsViewEvent extends ShowViewEvent<ShowStatisticsViewHandler>{
 	
 	public static final EventType<ShowStatisticsViewHandler> TYPE = new EventType<ShowStatisticsViewHandler>();
 	

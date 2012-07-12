@@ -1,14 +1,14 @@
 package com.mvpvaadin.mailexample.inbox;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.EventType;
+import com.mvplite.event.ShowViewEvent;
 
 /**
  * This event is thrown to display the {@link InboxView}
  * @author Hannes Dorfmann
  *
  */
-public class ShowInboxViewEvent extends Event<ShowInboxViewRequiredHandler>{
+public class ShowInboxViewEvent extends ShowViewEvent<ShowInboxViewRequiredHandler>{
 
 	private static final long serialVersionUID = 1343424346698621544L;
 

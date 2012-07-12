@@ -1,7 +1,7 @@
 package com.mvpvaadin.mailexample.service.event;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.Event;
+import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.Mail;
 
 public class NewMailInOutboxEvent extends Event<NewMailInOutboxHandler>{

@@ -1,8 +1,8 @@
 package com.mvpvaadin.mailexample.outbox;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.ShowViewEventHandler;
 
-public interface ShowOutboxHandler extends EventHandler{
+public interface ShowOutboxHandler extends ShowViewEventHandler{
 
 	public void onShowOutboxRequired();
 }

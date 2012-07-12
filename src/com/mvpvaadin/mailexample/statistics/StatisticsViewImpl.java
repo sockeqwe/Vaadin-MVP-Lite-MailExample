@@ -1,10 +1,12 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.event.EventBus;
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventBus;
+import com.mvplite.event.EventHandler;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.ShowViewEventHandler;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvpvaadin.view.NavigateableView;
+import com.mvplite.view.NavigateableView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -87,7 +89,7 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 	}
 
 
-	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
+	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
 		return new ShowStatisticsViewEvent();
 	}
 

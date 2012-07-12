@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.main;
 
-import com.mvpvaadin.view.NavigateableView;
+import com.mvplite.view.NavigateableView;
 
 public interface MainView extends NavigateableView {
 	

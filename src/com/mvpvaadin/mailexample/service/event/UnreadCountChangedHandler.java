@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.service.event;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventHandler;
 
 /**
  * The handler to handle {@link UnreadCountChangedEvent}s

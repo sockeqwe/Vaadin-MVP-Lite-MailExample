@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.login.LoginSuccessfulEvent;
 import com.mvpvaadin.mailexample.login.LoginSuccessfulHandler;
@@ -12,7 +12,7 @@ import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
 import com.mvpvaadin.mailexample.main.ShowMainViewHandler;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvpvaadin.view.NavigationController;
+import com.mvplite.view.LiteNavigationController;
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
 
@@ -21,7 +21,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	private static final long serialVersionUID = -147738545672590891L;
 	
 	private EventBus eventBus = new EventBus();
-	private NavigationController navigationController = new NavigationController(eventBus);
+	private LiteNavigationController navigationController = new LiteNavigationController(eventBus);
 	
 	private LoginViewImpl loginView;
 	private Window mainWindow;
@@ -60,7 +60,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 
 	public void onLogout(User user) {
 		
-		navigationController.clearUriFragments();
+		//navigationController.clearUriFragments();
 		
 		AuthenticationService.getInstance().doLogout(user);
 		loginView.clearForm();

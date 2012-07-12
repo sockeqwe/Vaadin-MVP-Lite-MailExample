@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.writemail;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -12,7 +12,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Window.Notification;
 
 public class WriteMailViewImpl extends Window implements WriteMailView{
 	

@@ -1,9 +1,9 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.ShowViewEventHandler;
 
 
-public interface ShowStatisticsViewHandler extends EventHandler {
+public interface ShowStatisticsViewHandler extends ShowViewEventHandler {
 	
 	public void onShowStatisticsViewRequired();
 

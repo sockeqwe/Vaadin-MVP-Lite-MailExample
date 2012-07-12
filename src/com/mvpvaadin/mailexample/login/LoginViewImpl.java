@@ -2,7 +2,7 @@ package com.mvpvaadin.mailexample.login;
 
 import java.io.Serializable;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.terminal.Resource;

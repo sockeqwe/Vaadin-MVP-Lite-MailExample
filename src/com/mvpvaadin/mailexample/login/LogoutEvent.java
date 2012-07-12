@@ -1,11 +1,13 @@
 package com.mvpvaadin.mailexample.login;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.Event;
+import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.User;
 
 public class LogoutEvent extends Event<LogoutHandler> {
 	
+	private static final long serialVersionUID = 1518609467415028320L;
+
 	private User user;
 	
 	public static final EventType<LogoutHandler> TYPE = new EventType<LogoutHandler>();

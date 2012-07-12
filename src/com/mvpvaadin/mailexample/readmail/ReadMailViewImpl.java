@@ -1,20 +1,21 @@
 package com.mvpvaadin.mailexample.readmail;
 
-import com.mvpvaadin.event.EventBus;
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.EventBus;
+import com.mvplite.event.ShowViewEvent;
+import com.mvplite.event.ShowViewEventHandler;
+import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.writemail.ShowWriteMailEvent;
-import com.mvpvaadin.view.NavigateableView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.Runo;
 
 public class ReadMailViewImpl extends Panel implements ReadMailView{
@@ -162,7 +163,7 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		
 	}
 
-	public com.mvpvaadin.event.Event<? extends EventHandler> getEventToShowThisView() {
+	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
 		return new ShowReadMailEvent(presenter.getCurrentMail());
 	}
 

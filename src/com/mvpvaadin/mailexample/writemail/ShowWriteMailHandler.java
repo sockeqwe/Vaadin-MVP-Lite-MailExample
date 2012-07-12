@@ -1,8 +1,8 @@
 package com.mvpvaadin.mailexample.writemail;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.ShowViewEventHandler;
 
-public interface ShowWriteMailHandler extends EventHandler{
+public interface ShowWriteMailHandler extends ShowViewEventHandler{
 
 	public void onShowWriteMailViewRequired(String receiverMailAddress, String subject);
 }

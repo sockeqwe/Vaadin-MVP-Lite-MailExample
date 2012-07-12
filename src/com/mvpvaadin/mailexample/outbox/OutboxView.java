@@ -3,7 +3,7 @@ package com.mvpvaadin.mailexample.outbox;
 import java.util.List;
 
 import com.mvpvaadin.mailexample.data.Mail;
-import com.mvpvaadin.view.NavigateableView;
+import com.mvplite.view.NavigateableView;
 
 public interface OutboxView extends NavigateableView {
 

@@ -1,8 +1,8 @@
 package com.mvpvaadin.mailexample.inbox;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.ShowViewEventHandler;
 
-public interface ShowInboxViewRequiredHandler extends EventHandler {
+public interface ShowInboxViewRequiredHandler extends ShowViewEventHandler {
 	
 	public void onShowInboxViewRequired();
 

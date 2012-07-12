@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
@@ -8,7 +8,7 @@ import com.mvpvaadin.mailexample.service.event.NewMailInOutboxEvent;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxHandler;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedHandler;
-import com.mvpvaadin.presenter.Presenter;
+import com.mvplite.presenter.Presenter;
 
 public class StatisticsPresenter extends Presenter<StatisticsView> implements UnreadCountChangedHandler, NewMailInOutboxHandler{
 

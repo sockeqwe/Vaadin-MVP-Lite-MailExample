@@ -1,8 +1,8 @@
 package com.mvpvaadin.mailexample.main;
 
-import com.mvpvaadin.event.EventHandler;
+import com.mvplite.event.ShowViewEventHandler;
 
-public interface ShowMainViewHandler extends EventHandler {
+public interface ShowMainViewHandler extends ShowViewEventHandler {
 
 	public void onShowMainViewRequired();
 }

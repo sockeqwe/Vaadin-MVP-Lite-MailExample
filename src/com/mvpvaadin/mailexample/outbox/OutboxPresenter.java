@@ -1,12 +1,12 @@
 package com.mvpvaadin.mailexample.outbox;
 
-import com.mvpvaadin.event.EventBus;
+import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxEvent;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxHandler;
-import com.mvpvaadin.presenter.Presenter;
+import com.mvplite.presenter.Presenter;
 
 public class OutboxPresenter extends Presenter<OutboxView> implements NewMailInOutboxHandler{
 	

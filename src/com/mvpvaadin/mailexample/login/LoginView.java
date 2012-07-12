@@ -1,6 +1,6 @@
 package com.mvpvaadin.mailexample.login;
 
-import com.mvpvaadin.view.View;
+import com.mvplite.view.View;
 
 public interface LoginView extends View{
 	

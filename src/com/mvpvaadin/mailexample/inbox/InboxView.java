@@ -3,7 +3,7 @@ package com.mvpvaadin.mailexample.inbox;
 import java.util.List;
 
 import com.mvpvaadin.mailexample.data.Mail;
-import com.mvpvaadin.view.NavigateableSubView;
+import com.mvplite.view.NavigateableSubView;
 
 
 public interface InboxView extends NavigateableSubView{

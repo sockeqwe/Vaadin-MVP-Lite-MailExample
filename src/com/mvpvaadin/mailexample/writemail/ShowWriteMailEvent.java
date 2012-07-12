@@ -1,9 +1,9 @@
 package com.mvpvaadin.mailexample.writemail;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.EventType;
+import com.mvplite.event.ShowViewEvent;
 
-public class ShowWriteMailEvent extends Event<ShowWriteMailHandler> {
+public class ShowWriteMailEvent extends ShowViewEvent<ShowWriteMailHandler> {
 
 	private static final long serialVersionUID = -8150281282476343956L;
 

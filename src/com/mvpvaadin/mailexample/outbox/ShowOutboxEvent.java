@@ -1,9 +1,9 @@
 package com.mvpvaadin.mailexample.outbox;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.EventType;
+import com.mvplite.event.ShowViewEvent;
 
-public class ShowOutboxEvent extends Event<ShowOutboxHandler>{
+public class ShowOutboxEvent extends ShowViewEvent<ShowOutboxHandler>{
 
 	private static final long serialVersionUID = 2291299420081670227L;
 

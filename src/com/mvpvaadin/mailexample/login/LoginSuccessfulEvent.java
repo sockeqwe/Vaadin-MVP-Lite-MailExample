@@ -1,10 +1,12 @@
 package com.mvpvaadin.mailexample.login;
 
-import com.mvpvaadin.event.Event;
-import com.mvpvaadin.event.EventType;
+import com.mvplite.event.Event;
+import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.User;
 
 public class LoginSuccessfulEvent extends Event<LoginSuccessfulHandler>{
+
+	private static final long serialVersionUID = -1165578928902005502L;
 
 	public static EventType<LoginSuccessfulHandler> TYPE = new EventType<LoginSuccessfulHandler>();
 	
