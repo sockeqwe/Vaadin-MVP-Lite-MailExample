@@ -2,6 +2,7 @@ package com.mvpvaadin.mailexample.outbox;
 
 import com.mvplite.event.EventType;
 import com.mvplite.event.ShowViewEvent;
+import com.mvpvaadin.mailexample.data.Mail;
 
 public class ShowOutboxEvent extends ShowViewEvent<ShowOutboxHandler>{
 
@@ -10,6 +11,14 @@ public class ShowOutboxEvent extends ShowViewEvent<ShowOutboxHandler>{
 	public static final EventType<ShowOutboxHandler> TYPE = 
 			new EventType<ShowOutboxHandler>();
 	
+	
+	private Mail preselectedMail;
+	
+	public ShowOutboxEvent(Mail preselectedMail){
+		this.preselectedMail = preselectedMail;
+	}
+	
+	
 	@Override
 	public EventType<ShowOutboxHandler> getType() {
 		return TYPE;
@@ -17,7 +26,7 @@ public class ShowOutboxEvent extends ShowViewEvent<ShowOutboxHandler>{
 
 	@Override
 	public void dispatch(ShowOutboxHandler handler) {
-		handler.onShowOutboxRequired();
+		handler.onShowOutboxRequired(preselectedMail);
 	}
 
 }

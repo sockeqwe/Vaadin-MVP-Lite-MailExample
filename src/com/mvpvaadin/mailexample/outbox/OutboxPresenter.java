@@ -14,6 +14,7 @@ public class OutboxPresenter extends Presenter<OutboxView> implements NewMailInO
 
 	private MailService mailService;
 	private User user;
+	
 
 	public OutboxPresenter(OutboxView view, EventBus eventBus, MailService mailService, User user) {
 		super(view, eventBus);
@@ -34,6 +35,11 @@ public class OutboxPresenter extends Presenter<OutboxView> implements NewMailInO
 	public void onNewMailInOutbox(Mail mail) {
 		// We are lazy, so refresh the whole list
 		refreshList();
+	}
+	
+	
+	public void setPreselectedMail(Mail mail){
+		getView().preselectMail(mail);
 	}
 
 }

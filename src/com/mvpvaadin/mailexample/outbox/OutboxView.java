@@ -8,4 +8,5 @@ import com.mvplite.view.NavigateableView;
 public interface OutboxView extends NavigateableView {
 
 	public void setMails(List<Mail> mails);
+	public void preselectMail(Mail mail);
 }

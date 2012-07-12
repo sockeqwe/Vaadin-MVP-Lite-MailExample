@@ -147,7 +147,7 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 			private static final long serialVersionUID = 315579969624810150L;
 
 			public void buttonClick(ClickEvent event) {
-				eventBus.fireEvent(new ShowOutboxEvent());
+				eventBus.fireEvent(new ShowOutboxEvent(null));
 			}
 		});
 		
@@ -292,11 +292,12 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	}
 
 
-	public void onShowOutboxRequired() {
+	public void onShowOutboxRequired(Mail preselectedMail) {
 		if (outboxView == null)
 			outboxView = new OutboxViewImpl(eventBus, user,  presenter.getMailService(), navigationController);
 		
 		outboxView.getPresenter().refreshList();
+		outboxView.getPresenter().setPreselectedMail(preselectedMail);
 		setSubview(outboxView);
 		navigationController.setCurrentView(outboxView);
 	}
@@ -317,6 +318,8 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		getWindow().addWindow(writeMailView);
 		
 	}
+
+
 	
 		
 	

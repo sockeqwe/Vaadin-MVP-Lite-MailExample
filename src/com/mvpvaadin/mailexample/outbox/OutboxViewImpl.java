@@ -34,6 +34,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 	
 	private Table mailTable;
 	private SelectHintView selectHintView;
+	private Mail currentSelectedMail;
 	
 	// SubViews
 	private OutboxMailDetailsViewImpl mailDetailsView;
@@ -112,6 +113,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 
 			public void valueChange(ValueChangeEvent event) {
 				Mail mail = (Mail) event.getProperty().getValue();
+				currentSelectedMail = mail;
 				eventBus.fireEvent(new ShowOutboxMailDetailsEvent(mail));
 			}
 		});
@@ -125,7 +127,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 }
 
 	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
-		return new ShowOutboxEvent();
+		return new ShowOutboxEvent(currentSelectedMail);
 	}
 
 	
@@ -150,6 +152,13 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 			this.setSecondComponent(mailDetailsView);
 		}
 		
+	}
+
+	public void preselectMail(Mail mail) {
+		if (mail == null)
+			this.setSecondComponent(selectHintView);
+		
+		mailTable.setValue(mail);
 	}
 	
 }
