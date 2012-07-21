@@ -94,7 +94,7 @@
 	text-align: center;
 }
 
-.niceArrowElement>.v-button-wrap>.v-label{
+.niceArrowElement>.v-button-wrap>.v-button-caption{
     line-height: 30px;
 }
 
