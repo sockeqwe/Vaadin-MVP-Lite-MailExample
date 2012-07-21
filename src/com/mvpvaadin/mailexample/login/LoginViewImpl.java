@@ -30,9 +30,9 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 	private PasswordField passwordField;
 	private Window subWindow;
 	
-	public LoginViewImpl(EventBus eventBus){
+	public LoginViewImpl(EventBus eventBus, AuthenticationService service){
 		super("Login");
-		presenter = new LoginPresenter(this, eventBus, AuthenticationService.getInstance());
+		presenter = new LoginPresenter(this, eventBus, service);
 		generateUI();
 		this.setSizeFull();
 		

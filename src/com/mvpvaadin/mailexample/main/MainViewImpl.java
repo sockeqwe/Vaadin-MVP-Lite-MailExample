@@ -7,6 +7,8 @@ import com.mvplite.event.ShowViewEvent;
 import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigationController;
 import com.mvplite.view.ui.Breadcrumbs;
+import com.mvplite.view.ui.ArrowBreadcrumbElementFactory;
+import com.mvplite.view.ui.ArrowSeparatorFactory;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.inbox.InboxViewImpl;
@@ -196,7 +198,9 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		
 		// add the Breadcrumb
 		Breadcrumbs breadcrumbs = new Breadcrumbs(navigationController);
-		breadcrumbs.setStyleName("breadcrumbs");
+		breadcrumbs.setBreadcrumbElementFactory( new ArrowBreadcrumbElementFactory());
+		breadcrumbs.setSeparatorFactory(new ArrowSeparatorFactory());
+		//breadcrumbs.setStyleName("breadcrumbs");
 		breadcrumbs.setWidth("100%");
 		
 		

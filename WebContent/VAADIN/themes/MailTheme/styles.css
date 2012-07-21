@@ -28,22 +28,120 @@
 	border-bottom: 1px solid #999;
     background: -moz-linear-gradient(top, #fff, #ccc);	
     background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
-    line-height: 24px;
+    line-height: 30px;
     padding-left: 18px;
-    height: 24px;
+    height: 30px;
    	
 }
+
+
+.breadcrumb-bar{
+    height: 30px;
+    overflow:visible;
+    padding-left: 18px;
+}
+
+
+.breadcrumb-bar.v-csslayout-container{
+	overflow:visible;
+	height: 30px;
+}
+
+
+.breadcrumb-bar.v-label{
+	height: 30px;
+	overflow:visible;
+	background: transparent;
+}
+
 
 .breadcrumbs .breadcrumb-element {
 	float: left;
 	margin-right: 5px;
 	display: inline-block;
-	height: 24px;
+	height: 30px;
 }
 
 .breadcrumbs .breadcrumb-element.v-label {
-    line-height: 24px;	
+    line-height: 30px;	
 }
+
+
+.niceArrowElement {
+	position: relative;
+	margin-left: -13px;
+	display: inline-block;
+	background-image: url(img/hc_yarnlett_global.png);
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+    padding-left: 25px;
+	padding-right: 30px;
+	height:30px;
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.breadcrumb-bar .niceArrowElement.v-label{
+	line-height: 30px;
+	vertical-align: middle;
+	text-decoration:none;
+}
+
+.niceArrowElement.v-button{
+	line-height: 30px;
+	vertical-align: middle;
+	text-decoration:none;
+	text-align: center;
+}
+
+.niceArrowElement>.v-button-wrap>.v-label{
+    line-height: 30px;
+}
+
+
+.niceArrowElement.v-button-wrap , .niceArrowElement.v-button-caption , .niceArrowElement.v-button-wrap {
+	line-height: 30px;
+	vertical-align: middle;
+	text-decoration:none;
+	text-align: center;
+}
+
+
+.niceArrowElement-first {
+	margin:0px;
+}
+
+
+.niceArrowElement:hover {
+	
+	background-position: 100% -48px;
+    color: #333;
+                
+}
+
+
+.niceArrowElementZIndex20{ z-index: 20;}
+.niceArrowElementZIndex19{ z-index: 19;}
+.niceArrowElementZIndex18{ z-index: 18;}
+.niceArrowElementZIndex17{ z-index: 17;}
+.niceArrowElementZIndex16{ z-index: 16;}
+.niceArrowElementZIndex15{ z-index: 15;}
+.niceArrowElementZIndex14{ z-index: 14;}
+.niceArrowElementZIndex13{ z-index: 13;}
+.niceArrowElementZIndex12{ z-index: 12;}
+.niceArrowElementZIndex11{ z-index: 11;}
+.niceArrowElementZIndex10{ z-index: 10;}
+.niceArrowElementZIndex9{ z-index: 9;}
+.niceArrowElementZIndex8{ z-index: 8;}
+.niceArrowElementZIndex7{ z-index: 7;}
+.niceArrowElementZIndex6{ z-index: 6;}
+.niceArrowElementZIndex5{ z-index: 5;}
+.niceArrowElementZIndex4{ z-index: 4;}
+.niceArrowElementZIndex3{ z-index: 3;}
+.niceArrowElementZIndex2{ z-index: 2;}
+.niceArrowElementZIndex1{ z-index: 1;}
+
+
 
 .outboxDetailView{
 	background-color: white;

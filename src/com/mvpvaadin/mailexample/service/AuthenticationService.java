@@ -1,5 +1,7 @@
 package com.mvpvaadin.mailexample.service;
 
+import java.io.Serializable;
+
 import com.mvpvaadin.mailexample.data.User;
 
 /**
@@ -8,20 +10,17 @@ import com.mvpvaadin.mailexample.data.User;
  * @author Hannes Dorfmann
  *
  */
-public class AuthenticationService {
+public class AuthenticationService implements Serializable{
 	
-	private static AuthenticationService INSTANCE = new AuthenticationService();
+	private static final long serialVersionUID = 5498616709841126210L;
 	
 	private int userIdCounter;
 	
-	private AuthenticationService(){
+	public AuthenticationService(){
 		userIdCounter = 0;
 	}
 	
-	
-	public static AuthenticationService getInstance(){
-		return INSTANCE;
-	}
+
 	
 	
 	/**

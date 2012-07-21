@@ -28,6 +28,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	private MainViewImpl mainView;
 	
 	private MailService mailService = new MailService();
+	private AuthenticationService authenticationService = new AuthenticationService();
 	
 	private User authenticatedUser;
 	
@@ -39,7 +40,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 		
 		
 		// Instantiate LoginView
-		loginView = new LoginViewImpl(eventBus);
+		loginView = new LoginViewImpl(eventBus, authenticationService);
 		
 		setMainWindow(loginView);
 	}
@@ -62,7 +63,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 		
 		//navigationController.clearUriFragments();
 		
-		AuthenticationService.getInstance().doLogout(user);
+		authenticationService.doLogout(user);
 		loginView.clearForm();
 		removeWindow(mainWindow);
 		setMainWindow(loginView);
