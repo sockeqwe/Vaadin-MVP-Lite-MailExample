@@ -1,7 +1,10 @@
 package com.mvpvaadin.mailexample;
 
+import javax.servlet.http.HttpSession;
+
 import com.mvplite.event.EventBus;
 import com.mvplite.event.EventHandler;
+import com.mvplite.event.RefresherGlobalEventBusDispatcher;
 import com.mvplite.view.LiteNavigationController;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.login.LoginSuccessfulEvent;
@@ -12,6 +15,7 @@ import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.vaadin.Application;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Window;
 
 public class MailApplication extends Application {
@@ -20,13 +24,13 @@ public class MailApplication extends Application {
 	
 	private final EventBus eventBus = new EventBus();
 	private final LiteNavigationController navigationController = new LiteNavigationController(eventBus);
-	
+	private RefresherGlobalEventBusDispatcher globalDispatcher;
 	private LoginViewImpl loginView;
 	private Window mainWindow;
 	private MainViewImpl mainView;
 	
-	private final MailService mailService = new MailService();
-	private final AuthenticationService authenticationService = new AuthenticationService();
+	private final MailService mailService = MailService.getInstance();
+	private final AuthenticationService authenticationService = AuthenticationService.getInstance();
 	
 	private User authenticatedUser;
 	
@@ -53,16 +57,24 @@ public class MailApplication extends Application {
 	public void onLoginSuccessful(LoginSuccessfulEvent e) {
 		this.authenticatedUser = e.getUser();
 		showMainView();
+		
+		WebApplicationContext context = (WebApplicationContext) getContext();
+		HttpSession session = context.getHttpSession();
+		
+		globalDispatcher = new RefresherGlobalEventBusDispatcher(
+				authenticatedUser.getEmailAddress(), session.getId(),
+				null, eventBus);
+		
+		mainWindow.addComponent(globalDispatcher);
+		globalDispatcher.start();
 	}
 
 
 	@EventHandler
 	public void onLogout(LogoutEvent e) {
-		
-		//navigationController.clearUriFragments();
-		
 		authenticationService.doLogout(e.getUser());
 		loginView.clearForm();
+		globalDispatcher.stop();
 		removeWindow(mainWindow);
 		setMainWindow(loginView);
 		this.close();

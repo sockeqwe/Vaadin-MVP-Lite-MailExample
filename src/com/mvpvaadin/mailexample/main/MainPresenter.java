@@ -7,6 +7,7 @@ import com.mvplite.event.EventHandler;
 import com.mvplite.presenter.Presenter;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
+import com.mvpvaadin.mailexample.service.event.MailReceivedEvent;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
 
 public class MainPresenter extends Presenter<MainView> implements  Serializable{
@@ -33,6 +34,14 @@ public class MainPresenter extends Presenter<MainView> implements  Serializable{
 	@EventHandler
 	public void onUnreadCountChanged(UnreadCountChangedEvent e) {
 		getView().setInboxUnreadCount(e.getUnreadCount());
+	}
+	
+	@EventHandler
+	public void onNewMailReceived(MailReceivedEvent e){
+		getView().showNewMailNotification("New Mail from "+e.getMail().getSender());
+		
+		// propagate that the unread count has changed
+		getEventBus().fireEvent(new UnreadCountChangedEvent(mailService.getUnreadInboxCountOf(user)));
 	}
 
 	public MailService getMailService() {

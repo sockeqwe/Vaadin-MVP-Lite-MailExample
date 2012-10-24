@@ -5,6 +5,7 @@ import com.mvplite.event.EventHandler;
 import com.mvplite.presenter.Presenter;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
+import com.mvpvaadin.mailexample.service.event.MailReceivedEvent;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
 
 public class InboxPresenter extends Presenter<InboxView>{
@@ -35,4 +36,8 @@ public class InboxPresenter extends Presenter<InboxView>{
 		refreshMails();
 	}
 
+	@EventHandler
+	public void onNewMailReceived(MailReceivedEvent e){
+		refreshMails();
+	}
 }

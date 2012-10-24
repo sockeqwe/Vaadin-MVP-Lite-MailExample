@@ -2,6 +2,8 @@ package com.mvpvaadin.mailexample.data;
 
 import java.io.Serializable;
 
+import com.mvpvaadin.mailexample.service.MailService;
+
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = 265816562494351007L;
@@ -31,7 +33,7 @@ public class User implements Serializable{
 	
 	
 	public String getEmailAddress(){
-		return username+"@mail-example.com";
+		return username+"@"+MailService.MAIL_DOMAIN;
 	}
 
 }

@@ -7,5 +7,6 @@ public interface MainView extends NavigateableView {
 	public void setInboxUnreadCount(int unread);
 	public void showStartSubView();
 	
+	public void showNewMailNotification(String msg);
 
 }

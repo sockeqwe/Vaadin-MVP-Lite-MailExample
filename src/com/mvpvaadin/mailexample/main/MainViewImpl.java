@@ -29,6 +29,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Runo;
 
 public class MainViewImpl extends VerticalLayout implements MainView {
@@ -36,7 +37,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 	private static final long serialVersionUID = -8755323074558632618L;
 	
 	private final NavigationController navigationController;
-	private final EventBus eventBus ;
+	private final EventBus eventBus;
 	private final User user;
 	private final MainPresenter presenter;
 	private Button inboxButton;
@@ -315,6 +316,11 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 		
 		getWindow().addWindow(writeMailView);
 		
+	}
+
+
+	public void showNewMailNotification(String msg) {
+		getWindow().showNotification(msg, Notification.TYPE_TRAY_NOTIFICATION);
 	}
 
 

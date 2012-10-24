@@ -4,25 +4,42 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.mvplite.event.GlobalEventBus;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
+import com.mvpvaadin.mailexample.service.event.MailReceivedEvent;
 
 public class MailService  implements Serializable{
 	
 	private static final long serialVersionUID = 4311641059640246505L;
 	
-	private List<Mail> inboxMailStorage;
-	private List<Mail> outboxMailStorage;
+	/**
+	 * Singleton Pattern
+	 */
+	private static MailService INSTANCE = new MailService();
 	
-	private String [] emails = {"tom@mail.com", "daniel@mail.com", "monica@mail.com", "simon@mail.com", "amy@mail.com", "maria@mail.com"};
-	private String [] subjects = {"Meeting", "Dinner", "Launch", "Hello", "Party", "Spam"};
-	private String msgBody = "Hello, this is a simple message body text.";
+	public static final String MAIL_DOMAIN = "mail.com";
+
+	private final Map<User, List<Mail>> inboxMailStorage;
+	private final Map<User, List<Mail>> outboxMailStorage;
+	
+	private final String [] emails = {"tom@other-mail.com", "daniel@other-mail.com", "monica@other-mail.com", "simon@other-mail.com", "amy@other-mail.com", "maria@other-mail.com"};
+	private final String [] subjects = {"Meeting", "Dinner", "Launch", "Hello", "Party", "Spam"};
+	private final String msgBody = "Hello, this is a simple message body text.";
 	
 	
-	public MailService(){
-		
+	private MailService(){ 
+		inboxMailStorage = new ConcurrentHashMap<User, List<Mail>>();
+		outboxMailStorage = new ConcurrentHashMap<User, List<Mail>>();
+	}
+	
+	
+	public static MailService getInstance(){
+		return INSTANCE; 
 	}
 
 	/**
@@ -98,19 +115,36 @@ public class MailService  implements Serializable{
 	 * @return {@link List} of all {@link Mail}s of a certain User
 	 */
 	public List<Mail> getInboxMailsOf(User user){
-
-		
-		if (inboxMailStorage == null)
-		{
-			inboxMailStorage = generateRandomMails(user, true);
-			
-		}
-		
-		return inboxMailStorage;
+		initInbox(user);
+		return inboxMailStorage.get(user);
 	}
 	
 	
+	/**
+	 * Initializes the Inbox with random mails, if the inbox is not already initialized
+	 */
+	private void initInbox(User user){
+		List<Mail> mails = inboxMailStorage.get(user);
+		
+		if (mails == null)
+		{
+			mails = generateRandomMails(user, true);
+			inboxMailStorage.put(user, mails);
+		}
+	}
 	
+	/**
+	 * Initializes the Outbox with random mails, if the users outbox is not already initialized
+	 */
+	private void initOutbox(User user){
+		List<Mail> mails = outboxMailStorage.get(user);
+		
+		if (mails == null)
+		{
+			mails = generateRandomMails(user, false);
+			outboxMailStorage.put(user, mails);
+		}
+	}
 	
 	/**
 	 * Get all (random generated) {@link Mail}s of an user.
@@ -118,14 +152,8 @@ public class MailService  implements Serializable{
 	 * @return {@link List} of all {@link Mail}s of a certain User
 	 */
 	public List<Mail> getOutboxMailsOf(User user){
-
-		
-		if (outboxMailStorage == null)
-		{
-			outboxMailStorage = generateRandomMails(user, false);
-		}
-		
-		return outboxMailStorage;
+		initOutbox(user);
+		return outboxMailStorage.get(user);
 	}
 	
 	
@@ -135,7 +163,23 @@ public class MailService  implements Serializable{
 	 * @param mail
 	 */
 	public void sendMail(User sender, Mail mail){
-		outboxMailStorage.add(mail);	
+		initOutbox(sender);
+		List<Mail>mails = outboxMailStorage.get(sender);
+		mails.add(mail);
+		
+		
+		// Check if the receiver is a user in the system
+		
+		User receiver = AuthenticationService.getInstance().isUser(mail.getReceiver());
+		if (receiver != null)
+		{
+			initInbox(receiver);
+			inboxMailStorage.get(receiver).add(mail);
+			// Fire Event to inform the receiver, that he has received a new mail
+			GlobalEventBus.fireEvent(mail.getReceiver(), new MailReceivedEvent(mail));
+		}
+		
+		
 	}
 	
 	
@@ -145,8 +189,8 @@ public class MailService  implements Serializable{
 	 * @param user
 	 */
 	public void deleteAllMailsOf(User user){
-		inboxMailStorage.clear();
-		outboxMailStorage.clear();
+		inboxMailStorage.remove(user).clear();
+		outboxMailStorage.remove(user).clear();
 	}
 	
 
