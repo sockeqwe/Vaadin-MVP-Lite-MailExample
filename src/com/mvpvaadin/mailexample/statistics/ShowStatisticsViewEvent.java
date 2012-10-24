@@ -1,30 +1,16 @@
 package com.mvpvaadin.mailexample.statistics;
 
-import com.mvplite.event.EventType;
 import com.mvplite.event.ShowViewEvent;
 
 
 /**
- * This is event is fired, to display the welcome view
+ * This is event is fired to display the {@link StatisticsView} on screen
  * 
  */
-public class ShowStatisticsViewEvent extends ShowViewEvent<ShowStatisticsViewHandler>{
+public class ShowStatisticsViewEvent extends ShowViewEvent{
 	
-	public static final EventType<ShowStatisticsViewHandler> TYPE = new EventType<ShowStatisticsViewHandler>();
 	
-	public ShowStatisticsViewEvent(){
-	}
+	private static final long serialVersionUID = -2496089268929421349L;
 
-	@Override
-	public EventType<ShowStatisticsViewHandler> getType() {
-		return TYPE;
-	}
-
-	@Override
-	public void dispatch(ShowStatisticsViewHandler handler) {
-		handler.onShowStatisticsViewRequired();
-	}
-	
-	
 	
 }

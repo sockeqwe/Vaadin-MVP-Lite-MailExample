@@ -2,7 +2,6 @@ package com.mvpvaadin.mailexample.readmail;
 
 import com.mvplite.event.EventBus;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
@@ -22,9 +21,9 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 
 	private static final long serialVersionUID = -582201495923291510L;
 
-	private EventBus eventBus;
-	private ReadMailPresenter presenter;
-	private NavigateableView parent;
+	private final EventBus eventBus;
+	private final ReadMailPresenter presenter;
+	private final NavigateableView parent;
 	
 	private Button readButton;
 	private Label fromLabel;
@@ -163,7 +162,7 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		
 	}
 
-	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowReadMailEvent(presenter.getCurrentMail());
 	}
 

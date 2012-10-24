@@ -1,19 +1,19 @@
 package com.mvpvaadin.mailexample.outbox;
 
 import com.mvplite.event.EventBus;
+import com.mvplite.event.EventHandler;
+import com.mvplite.presenter.Presenter;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxEvent;
-import com.mvpvaadin.mailexample.service.event.NewMailInOutboxHandler;
-import com.mvplite.presenter.Presenter;
 
-public class OutboxPresenter extends Presenter<OutboxView> implements NewMailInOutboxHandler{
+public class OutboxPresenter extends Presenter<OutboxView> {
 	
 	private static final long serialVersionUID = 3224474820958279963L;
 
-	private MailService mailService;
-	private User user;
+	private final MailService mailService;
+	private final User user;
 	
 
 	public OutboxPresenter(OutboxView view, EventBus eventBus, MailService mailService, User user) {
@@ -25,14 +25,15 @@ public class OutboxPresenter extends Presenter<OutboxView> implements NewMailInO
 	}
 	
 	private void bind(){
-		getEventBus().addHandler(NewMailInOutboxEvent.TYPE, this);
+		getEventBus().addHandler(this);
 	}
 	
 	public void refreshList(){
 		getView().setMails(mailService.getOutboxMailsOf(user));
 	}
 
-	public void onNewMailInOutbox(Mail mail) {
+	@EventHandler
+	public void onNewMailInOutbox(NewMailInOutboxEvent e) {
 		// We are lazy, so refresh the whole list
 		refreshList();
 	}

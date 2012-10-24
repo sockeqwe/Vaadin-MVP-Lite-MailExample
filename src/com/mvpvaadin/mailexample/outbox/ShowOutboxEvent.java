@@ -1,32 +1,27 @@
 package com.mvpvaadin.mailexample.outbox;
 
-import com.mvplite.event.EventType;
 import com.mvplite.event.ShowViewEvent;
 import com.mvpvaadin.mailexample.data.Mail;
 
-public class ShowOutboxEvent extends ShowViewEvent<ShowOutboxHandler>{
+/**
+ * This event is fired to bring the {@link OutboxView} on screen
+ * with the {@link #getPreselectedMail()} Mail as preselected.
+ * @author Hannes Dorfmann
+ *
+ */
+public class ShowOutboxEvent extends ShowViewEvent{
 
 	private static final long serialVersionUID = 2291299420081670227L;
 
-	public static final EventType<ShowOutboxHandler> TYPE = 
-			new EventType<ShowOutboxHandler>();
-	
-	
-	private Mail preselectedMail;
+	private final Mail preselectedMail;
 	
 	public ShowOutboxEvent(Mail preselectedMail){
 		this.preselectedMail = preselectedMail;
 	}
 	
 	
-	@Override
-	public EventType<ShowOutboxHandler> getType() {
-		return TYPE;
+	public Mail getPreselectedMail(){
+		return preselectedMail;
 	}
-
-	@Override
-	public void dispatch(ShowOutboxHandler handler) {
-		handler.onShowOutboxRequired(preselectedMail);
-	}
-
+	
 }

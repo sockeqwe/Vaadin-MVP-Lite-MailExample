@@ -1,21 +1,19 @@
 package com.mvpvaadin.mailexample.statistics;
 
 import com.mvplite.event.EventBus;
-import com.mvpvaadin.mailexample.data.Mail;
+import com.mvplite.event.EventHandler;
+import com.mvplite.presenter.Presenter;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.service.event.NewMailInOutboxEvent;
-import com.mvpvaadin.mailexample.service.event.NewMailInOutboxHandler;
 import com.mvpvaadin.mailexample.service.event.UnreadCountChangedEvent;
-import com.mvpvaadin.mailexample.service.event.UnreadCountChangedHandler;
-import com.mvplite.presenter.Presenter;
 
-public class StatisticsPresenter extends Presenter<StatisticsView> implements UnreadCountChangedHandler, NewMailInOutboxHandler{
+public class StatisticsPresenter extends Presenter<StatisticsView> {
 
 	private static final long serialVersionUID = -7907450349081515874L;
 	
-	private User user;
-	private MailService service;
+	private final User user;
+	private final MailService service;
 	
 	public StatisticsPresenter(StatisticsView view, EventBus eventBus, 
 			User user, MailService mailService) {
@@ -29,8 +27,7 @@ public class StatisticsPresenter extends Presenter<StatisticsView> implements Un
 	
 	
 	private void bind(){
-		getEventBus().addHandler(UnreadCountChangedEvent.TYPE, this);
-		getEventBus().addHandler(NewMailInOutboxEvent.TYPE, this);
+		getEventBus().addHandler(this);
 	}
 	
 	
@@ -42,13 +39,16 @@ public class StatisticsPresenter extends Presenter<StatisticsView> implements Un
 	}
 	
 
-	public void onUnreadCountChanged(int newUnreadValue) {
-		getView().setUnreadMailsCount(newUnreadValue);
+	
+	@EventHandler
+	public void onUnreadCountChanged(UnreadCountChangedEvent e) {
+		getView().setUnreadMailsCount(e.getUnreadCount());
 	}
 
 
 
-	public void onNewMailInOutbox(Mail mail) {
+	@EventHandler
+	public void onNewMailInOutbox(NewMailInOutboxEvent e) {
 		getView().setOutboxMailCount(service.getOutboxCountOf(user));
 	}
 	

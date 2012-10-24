@@ -1,28 +1,28 @@
 package com.mvpvaadin.mailexample.readmail;
 
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.Mail;
 
-public class ShowReadMailEvent extends ShowViewEvent<ShowReadMailRequiredHandler>{
+/**
+ * This event is fired to bring the "read mail" view on screen
+ * with the given mail ({@link #getMail()})
+ * @author Hannes Dorfmann
+ *
+ */
+public class ShowReadMailEvent extends ShowViewEvent{
 
-	public static final EventType<ShowReadMailRequiredHandler> TYPE = new EventType<ShowReadMailRequiredHandler>();
-	
-	private Mail mail;
+	private static final long serialVersionUID = -935406143959337075L;
+	private final Mail mail;
 	
 	public ShowReadMailEvent(Mail mail){
 		this.mail = mail;
 	}
 	
-	@Override
-	public EventType<ShowReadMailRequiredHandler> getType() {
-		return TYPE;
+	
+	public Mail getMail(){
+		return mail;
 	}
-
-	@Override
-	public void dispatch(ShowReadMailRequiredHandler handler) {
-		handler.onReadMailRequired(mail);
-	}
+	
 	
 
 }

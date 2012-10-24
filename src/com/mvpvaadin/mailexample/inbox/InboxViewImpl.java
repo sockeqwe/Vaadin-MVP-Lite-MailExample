@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.mvplite.event.EventBus;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
@@ -20,11 +19,11 @@ public class InboxViewImpl extends Table implements InboxView{
 
 	private static final long serialVersionUID = 2375843281754049077L;
 	
-	private NavigateableView parent;
-	private EventBus eventBus;
+	private final NavigateableView parent;
+	private final EventBus eventBus;
 	
 	
-	private InboxPresenter presenter;
+	private final InboxPresenter presenter;
 	
 	public InboxViewImpl(NavigateableView parent, EventBus eventBus, 
 			User user, MailService service){
@@ -106,7 +105,7 @@ public class InboxViewImpl extends Table implements InboxView{
 	}
 
 
-	public ShowViewEvent <? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowInboxViewEvent();
 	}
 

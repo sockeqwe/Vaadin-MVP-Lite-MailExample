@@ -4,33 +4,29 @@ import java.util.Date;
 import java.util.List;
 
 import com.mvplite.event.EventBus;
+import com.mvplite.event.EventHandler;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigationController;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.outbox.ui.SelectHintView;
 import com.mvpvaadin.mailexample.outboxmaildetails.OutboxMailDetailsViewImpl;
 import com.mvpvaadin.mailexample.outboxmaildetails.ShowOutboxMailDetailsEvent;
-import com.mvpvaadin.mailexample.outboxmaildetails.ShowOutboxMailDetailsHandler;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalSplitPanel;
 
-public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
-																ShowOutboxMailDetailsHandler{
+public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 	
 	private static final long serialVersionUID = 13527913492359998L;
 
-	private EventBus eventBus;
-	private NavigationController navigationController;
-	private OutboxPresenter presenter;
+	private final EventBus eventBus;
+	private final NavigationController navigationController;
+	private final OutboxPresenter presenter;
 	
 	private Table mailTable;
 	private SelectHintView selectHintView;
@@ -49,7 +45,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 	}
 	
 	private void bind(){
-		eventBus.addHandler(ShowOutboxMailDetailsEvent.TYPE, this);
+		eventBus.addHandler(this);
 	}
 	
 	public String getUriFragment() {
@@ -126,7 +122,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 		
 }
 
-	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowOutboxEvent(currentSelectedMail);
 	}
 
@@ -136,9 +132,10 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 	}
 
 
-	public void onShowOutboxMailDetailsRequired(Mail mail) {
+	@EventHandler
+	public void onShowOutboxMailDetailsRequired(ShowOutboxMailDetailsEvent e) {
 		
-		if (mail == null){
+		if (e.getMail() == null){
 			this.setSecondComponent(selectHintView);
 			navigationController.setCurrentView(this);
 		}
@@ -147,7 +144,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView,
 			if (mailDetailsView == null)
 				mailDetailsView = new OutboxMailDetailsViewImpl(eventBus, this);
 			
-			mailDetailsView.getPresenter().setMail(mail);
+			mailDetailsView.getPresenter().setMail(e.getMail());
 			navigationController.setCurrentView(mailDetailsView);
 			this.setSecondComponent(mailDetailsView);
 		}

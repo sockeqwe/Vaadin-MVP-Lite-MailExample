@@ -1,12 +1,10 @@
 package com.mvpvaadin.mailexample.statistics;
 
 import com.mvplite.event.EventBus;
-import com.mvplite.event.EventHandler;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
+import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvplite.view.NavigateableView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -16,14 +14,14 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 	
 	private static final long serialVersionUID = -3900718906900018585L;
 	
-	private NavigateableView parent;
+	private final NavigateableView parent;
 	
 	private Label unreadCountLabel;
 	private Label usernameLabel;
 	private Label emailAddressLabel;
 	private Label outboxCountLabel;
 	
-	private StatisticsPresenter presenter;
+	private final StatisticsPresenter presenter;
 	
 	public StatisticsViewImpl(NavigateableView parent, EventBus eventBus, 
 			User user, MailService service){
@@ -89,7 +87,7 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 	}
 
 
-	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowStatisticsViewEvent();
 	}
 

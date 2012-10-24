@@ -1,7 +1,6 @@
 package com.mvpvaadin.mailexample.service.event;
 
 import com.mvplite.event.Event;
-import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.mvpvaadin.mailexample.data.User;
 
@@ -12,25 +11,17 @@ import com.mvpvaadin.mailexample.data.User;
  * @author Hannes Dorfmann
  *
  */
-public class UnreadCountChangedEvent extends Event<UnreadCountChangedHandler> {
+public class UnreadCountChangedEvent extends Event {
 
-	public static final EventType<UnreadCountChangedHandler> TYPE = new EventType<UnreadCountChangedHandler>();
-	
-	private int newUnradCount;
+	private static final long serialVersionUID = -2557815297461590953L;
+	private final int newUnradCount;
 	
 	public UnreadCountChangedEvent(int newUnreadCount){
 		this.newUnradCount = newUnreadCount;
 	}
 	
-	
-	@Override
-	public EventType<UnreadCountChangedHandler> getType() {
-		return TYPE;
-	}
-
-	@Override
-	public void dispatch(UnreadCountChangedHandler handler) {
-		handler.onUnreadCountChanged(newUnradCount);
+	public int getUnreadCount(){
+		return newUnradCount;
 	}
 
 }

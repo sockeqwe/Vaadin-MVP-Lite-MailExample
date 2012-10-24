@@ -1,16 +1,14 @@
 package com.mvpvaadin.mailexample.login;
 
 import com.mvplite.event.Event;
-import com.mvplite.event.EventType;
 import com.mvpvaadin.mailexample.data.User;
 
-public class LoginSuccessfulEvent extends Event<LoginSuccessfulHandler>{
+public class LoginSuccessfulEvent extends Event{
 
 	private static final long serialVersionUID = -1165578928902005502L;
 
-	public static EventType<LoginSuccessfulHandler> TYPE = new EventType<LoginSuccessfulHandler>();
 	
-	private User authenticatedUser;
+	private final User authenticatedUser;
 	
 	
 	public LoginSuccessfulEvent(User authenticatedUser){
@@ -18,15 +16,8 @@ public class LoginSuccessfulEvent extends Event<LoginSuccessfulHandler>{
 	}
 	
 	
-	@Override
-	public void dispatch(LoginSuccessfulHandler handler) {
-		handler.onLoginSuccessful(authenticatedUser);
+
+	public User getUser(){
+		return authenticatedUser;
 	}
-
-
-	@Override
-	public EventType<LoginSuccessfulHandler> getType() {
-		return TYPE;
-	}
-
 }

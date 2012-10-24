@@ -2,21 +2,18 @@ package com.mvpvaadin.mailexample.outboxmaildetails;
 
 import com.mvplite.event.EventBus;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigateableSubView;
 import com.mvplite.view.NavigateableView;
 import com.mvpvaadin.mailexample.data.Mail;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class OutboxMailDetailsViewImpl extends VerticalLayout implements OutboxMailDetailsView,
-																	NavigateableSubView{
+public class OutboxMailDetailsViewImpl extends VerticalLayout implements OutboxMailDetailsView,  NavigateableSubView{
 
 	private static final long serialVersionUID = 6755094650406479739L;
 
-	private EventBus eventBus;
-	private OutboxMailDetailsPresenter presenter;
-	private NavigateableView parent;
+	private final OutboxMailDetailsPresenter presenter;
+	private final NavigateableView parent;
 	
 	private Label fromLabel;
 	private Label toLabel;
@@ -27,7 +24,6 @@ public class OutboxMailDetailsViewImpl extends VerticalLayout implements OutboxM
 	
 	public OutboxMailDetailsViewImpl(EventBus eventBus, NavigateableView parent){
 		this.parent = parent;
-		this.eventBus = eventBus;
 		generateUI();
 		presenter = new OutboxMailDetailsPresenter(this, eventBus);
 	}
@@ -80,7 +76,7 @@ public class OutboxMailDetailsViewImpl extends VerticalLayout implements OutboxM
 	}
 
 
-	public ShowViewEvent <? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowOutboxMailDetailsEvent(presenter.getMail());
 	}
 

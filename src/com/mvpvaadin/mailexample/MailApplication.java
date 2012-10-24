@@ -1,34 +1,32 @@
 package com.mvpvaadin.mailexample;
 
 import com.mvplite.event.EventBus;
+import com.mvplite.event.EventHandler;
+import com.mvplite.view.LiteNavigationController;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.login.LoginSuccessfulEvent;
-import com.mvpvaadin.mailexample.login.LoginSuccessfulHandler;
 import com.mvpvaadin.mailexample.login.LoginViewImpl;
 import com.mvpvaadin.mailexample.login.LogoutEvent;
-import com.mvpvaadin.mailexample.login.LogoutHandler;
 import com.mvpvaadin.mailexample.main.MainViewImpl;
 import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
-import com.mvpvaadin.mailexample.main.ShowMainViewHandler;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.mvplite.view.LiteNavigationController;
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
 
-public class MailApplication extends Application implements LoginSuccessfulHandler, LogoutHandler, ShowMainViewHandler{
+public class MailApplication extends Application {
 	
 	private static final long serialVersionUID = -147738545672590891L;
 	
-	private EventBus eventBus = new EventBus();
-	private LiteNavigationController navigationController = new LiteNavigationController(eventBus);
+	private final EventBus eventBus = new EventBus();
+	private final LiteNavigationController navigationController = new LiteNavigationController(eventBus);
 	
 	private LoginViewImpl loginView;
 	private Window mainWindow;
 	private MainViewImpl mainView;
 	
-	private MailService mailService = new MailService();
-	private AuthenticationService authenticationService = new AuthenticationService();
+	private final MailService mailService = new MailService();
+	private final AuthenticationService authenticationService = new AuthenticationService();
 	
 	private User authenticatedUser;
 	
@@ -36,7 +34,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	public void init() {
 		bind();
 		setTheme("MailTheme");
-		navigationController.setShowErrorMessageOnUnknownUriFragment(false);
+		navigationController.setFire404OnUnknownUriFragment(false);
 		
 		
 		// Instantiate LoginView
@@ -47,29 +45,35 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 
 	
 	private void bind(){
-		eventBus.addHandler(LoginSuccessfulEvent.TYPE, this);
-		eventBus.addHandler(LogoutEvent.TYPE, this);
-		eventBus.addHandler(ShowMainViewEvent.TYPE, this);
+		eventBus.addHandler(this);
 	}
 	
 
-	public void onLoginSuccessful(User authenticatedUser) {
-		this.authenticatedUser = authenticatedUser;
+	@EventHandler
+	public void onLoginSuccessful(LoginSuccessfulEvent e) {
+		this.authenticatedUser = e.getUser();
 		showMainView();
 	}
 
 
-	public void onLogout(User user) {
+	@EventHandler
+	public void onLogout(LogoutEvent e) {
 		
 		//navigationController.clearUriFragments();
 		
-		authenticationService.doLogout(user);
+		authenticationService.doLogout(e.getUser());
 		loginView.clearForm();
 		removeWindow(mainWindow);
 		setMainWindow(loginView);
 		this.close();
 	}
-
+	
+	
+	@EventHandler
+	public void onShowMainViewRequired(ShowMainViewEvent e) {
+		showMainView();
+	}
+	
 	
 	private void showMainView(){
 		
@@ -91,9 +95,7 @@ public class MailApplication extends Application implements LoginSuccessfulHandl
 	}
 	
 
-	public void onShowMainViewRequired() {
-		showMainView();
-	}
+	
 	
 	
 	

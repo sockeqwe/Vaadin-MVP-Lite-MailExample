@@ -1,32 +1,24 @@
 package com.mvpvaadin.mailexample.main;
 
-import java.io.Serializable;
-
 import com.mvplite.event.EventBus;
+import com.mvplite.event.EventHandler;
 import com.mvplite.event.ShowViewEvent;
-import com.mvplite.event.ShowViewEventHandler;
 import com.mvplite.view.NavigationController;
-import com.mvplite.view.ui.Breadcrumbs;
 import com.mvplite.view.ui.ArrowBreadcrumbElementFactory;
 import com.mvplite.view.ui.ArrowSeparatorFactory;
-import com.mvpvaadin.mailexample.data.Mail;
+import com.mvplite.view.ui.Breadcrumbs;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.inbox.InboxViewImpl;
 import com.mvpvaadin.mailexample.inbox.ShowInboxViewEvent;
-import com.mvpvaadin.mailexample.inbox.ShowInboxViewRequiredHandler;
 import com.mvpvaadin.mailexample.login.LogoutEvent;
 import com.mvpvaadin.mailexample.outbox.OutboxViewImpl;
 import com.mvpvaadin.mailexample.outbox.ShowOutboxEvent;
-import com.mvpvaadin.mailexample.outbox.ShowOutboxHandler;
 import com.mvpvaadin.mailexample.readmail.ReadMailViewImpl;
 import com.mvpvaadin.mailexample.readmail.ShowReadMailEvent;
-import com.mvpvaadin.mailexample.readmail.ShowReadMailRequiredHandler;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.mvpvaadin.mailexample.statistics.ShowStatisticsViewEvent;
-import com.mvpvaadin.mailexample.statistics.ShowStatisticsViewHandler;
 import com.mvpvaadin.mailexample.statistics.StatisticsViewImpl;
 import com.mvpvaadin.mailexample.writemail.ShowWriteMailEvent;
-import com.mvpvaadin.mailexample.writemail.ShowWriteMailHandler;
 import com.mvpvaadin.mailexample.writemail.WriteMailViewImpl;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -39,19 +31,14 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Runo;
 
-public class MainViewImpl extends VerticalLayout implements MainView, Serializable,
-															ShowStatisticsViewHandler,
-															ShowInboxViewRequiredHandler,
-															ShowReadMailRequiredHandler,
-															ShowOutboxHandler,
-															ShowWriteMailHandler{
+public class MainViewImpl extends VerticalLayout implements MainView {
 
 	private static final long serialVersionUID = -8755323074558632618L;
 	
-	private NavigationController navigationController;
-	private EventBus eventBus ;
-	private User user;
-	private MainPresenter presenter;
+	private final NavigationController navigationController;
+	private final EventBus eventBus ;
+	private final User user;
+	private final MainPresenter presenter;
 	private Button inboxButton;
 	
 	private VerticalLayout subViewContainer;
@@ -86,18 +73,14 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	
 	
 	private void bind(){
-		eventBus.addHandler(ShowStatisticsViewEvent.TYPE, this);
-		eventBus.addHandler(ShowInboxViewEvent.TYPE, this);
-		eventBus.addHandler(ShowReadMailEvent.TYPE, this);
-		eventBus.addHandler(ShowOutboxEvent.TYPE, this);
-		eventBus.addHandler(ShowWriteMailEvent.TYPE, this);
+		eventBus.addHandler(this);
 	}
 	
 	
 	public String getUriFragment() {
 		return "home";
 	}
-
+	
 	public String getBreadcrumbTitle() {
 		return "Home";
 	}
@@ -258,7 +241,8 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 		
 	}
 	
-	public void onShowStatisticsViewRequired() {
+	@EventHandler
+	public void onShowStatisticsViewRequired(ShowStatisticsViewEvent e) {
 		if (statisticsView == null)
 			statisticsView = new StatisticsViewImpl(this, eventBus, user, presenter.getMailService());
 		
@@ -269,24 +253,26 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	}
 
 
-	public ShowViewEvent<? extends ShowViewEventHandler> getEventToShowThisView() {
+	public ShowViewEvent getEventToShowThisView() {
 		return new ShowMainViewEvent();
 	}
 
 
-	public void onReadMailRequired(Mail mail) {
+	@EventHandler
+	public void onReadMailRequired(ShowReadMailEvent e) {
 		
 		if (readMailView == null)
 			readMailView = new ReadMailViewImpl(inboxView, eventBus, user, presenter.getMailService());
 		
-		readMailView.getPresenter().setMail(mail);
+		readMailView.getPresenter().setMail(e.getMail());
 		
 		setSubview(readMailView);
 		navigationController.setCurrentView(readMailView);
 	}
 
 
-	public void onShowInboxViewRequired() {
+	@EventHandler
+	public void onShowInboxViewRequired(ShowInboxViewEvent e) {
 		if (inboxView == null)
 			inboxView = new InboxViewImpl(this, eventBus, user, presenter.getMailService());
 		
@@ -296,28 +282,36 @@ public class MainViewImpl extends VerticalLayout implements MainView, Serializab
 	}
 
 
-	public void onShowOutboxRequired(Mail preselectedMail) {
+	@EventHandler
+	public void onShowOutboxRequired(ShowOutboxEvent e) {
 		if (outboxView == null)
 			outboxView = new OutboxViewImpl(eventBus, user,  presenter.getMailService(), navigationController);
 		
 		outboxView.getPresenter().refreshList();
-		outboxView.getPresenter().setPreselectedMail(preselectedMail);
+		outboxView.getPresenter().setPreselectedMail(e.getPreselectedMail());
 		setSubview(outboxView);
 		navigationController.setCurrentView(outboxView);
 	}
 
 
-	public void onShowWriteMailViewRequired(String receiverMailAddress,
-			String subject) {
+	@EventHandler
+	public void onShowWriteMailViewRequired(ShowWriteMailEvent e) {
 		if (writeMailView == null){
 			writeMailView = new WriteMailViewImpl(eventBus, user,  presenter.getMailService());
 		}
 		
+		String receiverMailAddress = e.getReceiverMailAddress();
+		
 		if (receiverMailAddress != null) 
 			writeMailView.setReceiverMailAddress(receiverMailAddress);
+		else
+			writeMailView.setReceiverMailAddress("");
 		
+		String subject = e.getSubject();
 		if (subject != null)
 			writeMailView.setSubject(subject);
+		else
+			writeMailView.setSubject("");
 		
 		getWindow().addWindow(writeMailView);
 		
