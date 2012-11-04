@@ -18,4 +18,6 @@
     -->
     <!-- <set-property name="user.agent" value="gecko1_8"/> -->
 
+
+    <inherits name="com.github.wolfie.refresher.RefresherApplicationWidgetset" />
 </module>

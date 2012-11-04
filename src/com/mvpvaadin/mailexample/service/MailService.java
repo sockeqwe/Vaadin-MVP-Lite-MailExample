@@ -176,7 +176,7 @@ public class MailService  implements Serializable{
 			initInbox(receiver);
 			inboxMailStorage.get(receiver).add(mail);
 			// Fire Event to inform the receiver, that he has received a new mail
-			GlobalEventBus.fireEvent(mail.getReceiver(), new MailReceivedEvent(mail));
+			GlobalEventBus.fireEventToUser(mail.getReceiver(), new MailReceivedEvent(mail));
 		}
 		
 		

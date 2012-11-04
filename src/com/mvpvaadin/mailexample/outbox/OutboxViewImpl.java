@@ -62,14 +62,10 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		Object[] ret = new Object[3];
 		
 		String receiver = m.getReceiver();
-		if (!m.isRead())
-			receiver = "<b>"+m.getReceiver()+"</b>";
 		
 		ret[0]= new Label(receiver, Label.CONTENT_XHTML);
 		
 		String subject= m.getSubject();
-		if (!m.isRead())
-			subject = "<b>"+m.getSubject()+"</b>";
 		ret[1]=new Label(subject, Label.CONTENT_XHTML);
 		
 		ret[2]=m.getDate();

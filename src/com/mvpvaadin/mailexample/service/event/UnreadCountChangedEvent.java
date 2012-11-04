@@ -6,7 +6,7 @@ import com.mvpvaadin.mailexample.data.User;
 
 
 /**
- * This event informs all {@link UnreadCountChangedHandler}s, that the number of unread {@link Mail}s of the 
+ * This event informs all corresponding handlers, that the number of unread {@link Mail}s of the 
  * authenticated {@link User} has changed.
  * @author Hannes Dorfmann
  *
