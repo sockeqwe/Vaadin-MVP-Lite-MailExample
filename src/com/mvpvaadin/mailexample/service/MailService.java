@@ -189,8 +189,13 @@ public class MailService  implements Serializable{
 	 * @param user
 	 */
 	public void deleteAllMailsOf(User user){
-		inboxMailStorage.remove(user).clear();
-		outboxMailStorage.remove(user).clear();
+		List<Mail> mails = inboxMailStorage.remove(user);
+		if (mails != null)
+			mails.clear();
+		
+		mails = outboxMailStorage.remove(user);
+		if (mails != null)
+			mails.clear();
 	}
 	
 
