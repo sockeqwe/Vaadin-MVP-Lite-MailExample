@@ -38,24 +38,29 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 		return presenter;
 	}
 	
+	@Override
 	public String getUriFragment() {
 		return "statistics";
 	}
 
+	@Override
 	public String getBreadcrumbTitle() {
 		return "Statistics";
 	}
 	
+	@Override
 	public void setUnreadMailsCount(int unread) {
 		unreadCountLabel.setCaption("You have "+unread+" unread mails in your inbox");
 	}
 
 
+	@Override
 	public void setUsername(String username) {
 		usernameLabel.setCaption("Hello "+username);
 	}
 
 
+	@Override
 	public void setEmailAddress(String emailAddress) {
 		emailAddressLabel.setCaption("Your email address is "+emailAddress);
 	}
@@ -78,19 +83,22 @@ public class StatisticsViewImpl extends Panel implements StatisticsView {
 		this.setStyleName(Runo.PANEL_LIGHT);
 		this.addStyleName("panelWhite");
 		this.setSizeFull();
-		this.addComponent(layout);
+		this.setContent(layout);
 	}
 
 
+	@Override
 	public NavigateableView getParentView() {
 		return parent;
 	}
 
 
+	@Override
 	public ShowViewEvent getEventToShowThisView() {
 		return new ShowStatisticsViewEvent();
 	}
 
+	@Override
 	public void setOutboxMailCount(int mails) {
 		outboxCountLabel.setCaption("You have "+mails+" mails in your outbox");
 	}

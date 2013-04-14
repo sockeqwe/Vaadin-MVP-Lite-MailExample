@@ -27,9 +27,9 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Runo;
 
 public class MainViewImpl extends VerticalLayout implements MainView {
@@ -78,10 +78,12 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 	}
 	
 	
+	@Override
 	public String getUriFragment() {
 		return "home";
 	}
 	
+	@Override
 	public String getBreadcrumbTitle() {
 		return "Home";
 	}
@@ -110,6 +112,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			
 			private static final long serialVersionUID = 5567732768481757445L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new LogoutEvent(user));
 			}
@@ -121,6 +124,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new ShowInboxViewEvent());
 			}
@@ -132,6 +136,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			
 			private static final long serialVersionUID = 315579969624810150L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new ShowOutboxEvent(null));
 			}
@@ -143,6 +148,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			
 			private static final long serialVersionUID = -1959036904032811749L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new ShowWriteMailEvent());
 			}
@@ -154,6 +160,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new ShowStatisticsViewEvent());
 			}
@@ -219,6 +226,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 	
 
 
+	@Override
 	public void setInboxUnreadCount(int unread) {
 		String caption = "inbox";
 		if (unread>0)
@@ -227,6 +235,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 	}
 
 	
+	@Override
 	public void showStartSubView(){
 		if (startView == null){
 			startView = new Panel("Welcome");
@@ -234,7 +243,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 			startView.addStyleName("panelWhite");
 			startView.setSizeFull();
 			
-			startView.addComponent(new Label("Hi "+user.getUsername()+", <br />use the main menu", Label.CONTENT_XHTML));
+			startView.setContent(new Label("Hi "+user.getUsername()+", <br />use the main menu", Label.CONTENT_XHTML));
 		}
 		
 		setSubview(startView);
@@ -254,6 +263,7 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 	}
 
 
+	@Override
 	public ShowViewEvent getEventToShowThisView() {
 		return new ShowMainViewEvent();
 	}
@@ -314,13 +324,14 @@ public class MainViewImpl extends VerticalLayout implements MainView {
 		else
 			writeMailView.setSubject("");
 		
-		getWindow().addWindow(writeMailView);
+		getUI().addWindow(writeMailView);
 		
 	}
 
 
+	@Override
 	public void showNewMailNotification(String msg) {
-		getWindow().showNotification(msg, Notification.TYPE_TRAY_NOTIFICATION);
+		Notification.show("New mail", msg, Notification.Type.TRAY_NOTIFICATION);
 	}
 
 

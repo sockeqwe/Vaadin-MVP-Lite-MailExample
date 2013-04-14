@@ -15,7 +15,7 @@ import com.mvpvaadin.mailexample.outboxmaildetails.ShowOutboxMailDetailsEvent;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.terminal.Sizeable;
+import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalSplitPanel;
@@ -48,10 +48,12 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		eventBus.addHandler(this);
 	}
 	
+	@Override
 	public String getUriFragment() {
 		return "outbox";
 	}
 
+	@Override
 	public String getBreadcrumbTitle() {
 		return "Outbox";
 	}
@@ -73,6 +75,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		return ret;
 	}
 
+	@Override
 	public void setMails(List<Mail> mails) {
 		
 		mailTable.removeAllItems();
@@ -99,10 +102,11 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		mailTable.setColumnReorderingAllowed(true);
 		mailTable.setColumnCollapsingAllowed(true);
 		mailTable.setSelectable(true);
-		mailTable.addListener(new Property.ValueChangeListener() {
+		mailTable.addValueChangeListener(new Property.ValueChangeListener() {
 			
 			private static final long serialVersionUID = -2985353369890003897L;
 
+			@Override
 			public void valueChange(ValueChangeEvent event) {
 				Mail mail = (Mail) event.getProperty().getValue();
 				currentSelectedMail = mail;
@@ -118,6 +122,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		
 }
 
+	@Override
 	public ShowViewEvent getEventToShowThisView() {
 		return new ShowOutboxEvent(currentSelectedMail);
 	}
@@ -147,6 +152,7 @@ public class OutboxViewImpl extends VerticalSplitPanel implements OutboxView{
 		
 	}
 
+	@Override
 	public void preselectMail(Mail mail) {
 		if (mail == null)
 			this.setSecondComponent(selectHintView);

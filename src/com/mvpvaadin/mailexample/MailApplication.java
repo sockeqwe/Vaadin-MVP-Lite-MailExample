@@ -1,7 +1,5 @@
 package com.mvpvaadin.mailexample;
 
-import javax.servlet.http.HttpSession;
-
 import com.mvplite.event.EventBus;
 import com.mvplite.event.EventHandler;
 import com.mvplite.event.RefresherGlobalEventBusDispatcher;
@@ -14,11 +12,12 @@ import com.mvpvaadin.mailexample.main.MainViewImpl;
 import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.vaadin.Application;
-import com.vaadin.terminal.gwt.server.WebApplicationContext;
-import com.vaadin.ui.Window;
+import com.vaadin.annotations.Theme;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.UI;
 
-public class MailApplication extends Application {
+@Theme("MailTheme")
+public class MailApplication extends UI {
 	
 	private static final long serialVersionUID = -147738545672590891L;
 	
@@ -26,7 +25,6 @@ public class MailApplication extends Application {
 	private final LiteNavigationController navigationController = new LiteNavigationController(eventBus);
 	private RefresherGlobalEventBusDispatcher globalDispatcher;
 	private LoginViewImpl loginView;
-	private Window mainWindow;
 	private MainViewImpl mainView;
 	
 	private final MailService mailService = MailService.getInstance();
@@ -35,16 +33,16 @@ public class MailApplication extends Application {
 	private User authenticatedUser;
 	
 	@Override
-	public void init() {
+	public void init(VaadinRequest request) {
 		bind();
-		setTheme("MailTheme");
+		
 		navigationController.setFire404OnUnknownUriFragment(false);
 		
 		
 		// Instantiate LoginView
 		loginView = new LoginViewImpl(eventBus, authenticationService);
 		
-		setMainWindow(loginView);
+		setContent(loginView);
 	}
 
 	
@@ -58,14 +56,13 @@ public class MailApplication extends Application {
 		this.authenticatedUser = e.getUser();
 		showMainView();
 		
-		WebApplicationContext context = (WebApplicationContext) getContext();
-		HttpSession session = context.getHttpSession();
+		String sessionId = getSession().getSession().getId();
 		
 		globalDispatcher = new RefresherGlobalEventBusDispatcher(
-				authenticatedUser.getEmailAddress(), session.getId(),
+				authenticatedUser.getEmailAddress(), sessionId,
 				null, eventBus);
 		
-		mainWindow.addComponent(globalDispatcher);
+		addExtension(globalDispatcher);
 		globalDispatcher.start();
 	}
 
@@ -75,8 +72,7 @@ public class MailApplication extends Application {
 		authenticationService.doLogout(e.getUser());
 		loginView.clearForm();
 		globalDispatcher.stop();
-		removeWindow(mainWindow);
-		setMainWindow(loginView);
+		setContent(loginView);
 		this.close();
 	}
 	
@@ -92,15 +88,7 @@ public class MailApplication extends Application {
 		if (mainView == null)
 			mainView = new MainViewImpl(authenticatedUser, eventBus, navigationController, mailService);
 		
-		
-		if (mainWindow == null)
-		{	mainWindow = new Window("Mail Application", mainView);
-			mainWindow.addComponent(navigationController);
-			
-		}
-		
-		removeWindow(getMainWindow());
-		setMainWindow(mainWindow);
+		setContent(mainView);
 
 		mainView.showStartSubView();
 		

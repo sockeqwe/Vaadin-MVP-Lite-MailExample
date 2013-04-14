@@ -5,16 +5,18 @@ import java.io.Serializable;
 import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.terminal.Resource;
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -22,13 +24,13 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 
 	private static final long serialVersionUID = 7744334012652777834L;
 	
-	private LoginPresenter presenter;
+	private final LoginPresenter presenter;
 	
 	private Button loginButton;
 	private Button clearButton;
 	private TextField usernameField;
 	private PasswordField passwordField;
-	private Window subWindow;
+	private final Window subWindow;
 	
 	public LoginViewImpl(EventBus eventBus, AuthenticationService service){
 		super("Login");
@@ -38,10 +40,12 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 		
 		
 		subWindow = new Window("Help");
-		subWindow.addComponent(new Label("Enter any arbitary username and password to login"));
+		subWindow.setContent(new Label("Enter any arbitary username and password to login"));
 		subWindow.center();
 		subWindow.setModal(true);
 		subWindow.setSizeUndefined();
+		
+		UI.getCurrent().addWindow(subWindow);
 		
 	}
 	
@@ -72,10 +76,11 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 		loginButton = new Button("login");
 		loginButton.setClickShortcut(KeyCode.ENTER);
 		loginButton.addStyleName("default");
-		loginButton.addListener(new ClickListener() {
+		loginButton.addClickListener(new ClickListener() {
 			
 			private static final long serialVersionUID = -2409849771220719930L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				doLogin();
 			}
@@ -85,10 +90,11 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 
 		clearButton = new Button("clear");
 		clearButton	.addStyleName("default");
-		clearButton.addListener(new ClickListener() {
+		clearButton.addClickListener(new ClickListener() {
 			
 			private static final long serialVersionUID = -5671474518871532339L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				clearForm();
 			}
@@ -100,12 +106,13 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 		
 		Button helpButton = new Button("help");
 		helpButton.addStyleName("default");
-		helpButton.addListener(new ClickListener() {
+		helpButton.addClickListener(new ClickListener() {
 
 			private static final long serialVersionUID = -1393725228206638408L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
-				addWindow(subWindow);
+				UI.getCurrent().addWindow(subWindow);
 			}
 			
 		});
@@ -125,16 +132,18 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 		this.setContent(mainLayout);
 	}
 	
+	@Override
 	public void showLoginFailed() {
 		enableFields(true);
-		showNotification("Login failed. Please try again.", Notification.TYPE_HUMANIZED_MESSAGE);
+		Notification.show("Login failed. Please try again.", Notification.Type.HUMANIZED_MESSAGE);
 	}
 	
 	private void doLogin(){
 		enableFields(false);
-		presenter.doLogin((String)usernameField.getValue(), (String) passwordField.getValue());
+		presenter.doLogin(usernameField.getValue(), passwordField.getValue());
 	}
 
+	@Override
 	public void clearForm() {
 		usernameField.setValue("");
 		passwordField.setValue("");

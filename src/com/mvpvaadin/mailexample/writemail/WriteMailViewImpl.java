@@ -4,20 +4,21 @@ import com.mvplite.event.EventBus;
 import com.mvpvaadin.mailexample.data.User;
 import com.mvpvaadin.mailexample.service.MailService;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class WriteMailViewImpl extends Window implements WriteMailView{
 	
 	private static final long serialVersionUID = -5065377876430244428L;
 
-	private WriteMailPresenter presenter;
+	private final WriteMailPresenter presenter;
 	
 	private TextField addressField;
 	private TextField subjectField;
@@ -47,9 +48,10 @@ public class WriteMailViewImpl extends Window implements WriteMailView{
 			
 			private static final long serialVersionUID = -8748444774015034730L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
-				presenter.attemptWriteMail((String)addressField.getValue(), 
-						(String) subjectField.getValue(), (String) messageField.getValue());
+				presenter.attemptWriteMail(addressField.getValue(), 
+						subjectField.getValue(), messageField.getValue());
 			}
 		});
 		
@@ -71,16 +73,19 @@ public class WriteMailViewImpl extends Window implements WriteMailView{
 		this.center();
 	}
 
+	@Override
 	public void showSuccessfulMessage() {
-		showNotification("Successful", Notification.TYPE_HUMANIZED_MESSAGE);
+		Notification.show("Successful", Notification.Type.HUMANIZED_MESSAGE);
 		this.close();
 	}
 
+	@Override
 	public void showErrorMessage(String reason) {
-		showNotification(reason, Notification.TYPE_WARNING_MESSAGE);
+		Notification.show(reason, Notification.Type.WARNING_MESSAGE);
 	}
 
 
+	@Override
 	public void clearForm() {
 		addressField.setValue("");
 		subjectField.setValue("");
@@ -88,11 +93,13 @@ public class WriteMailViewImpl extends Window implements WriteMailView{
 	}
 
 
+	@Override
 	public void setReceiverMailAddress(String mailAddress) {
 		addressField.setValue(mailAddress);
 	}
 
 
+	@Override
 	public void setSubject(String subject) {
 		subjectField.setValue(subject);
 	}

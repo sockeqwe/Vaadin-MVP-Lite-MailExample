@@ -52,6 +52,7 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 			
 			private static final long serialVersionUID = 960166525199315579L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				if(presenter.getCurrentMail().isRead()){
 					presenter.markMailAsUnread();
@@ -71,6 +72,7 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 			
 			private static final long serialVersionUID = 960166525199315579L;
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				eventBus.fireEvent(new ShowWriteMailEvent(
 						presenter.getCurrentMail().getSender(), 
@@ -121,21 +123,25 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		
 		
 		layout.setExpandRatio(messageBodyLabel, 1);
-		this.addComponent(layout);
+		setContent(layout);
 	}
 	
+	@Override
 	public NavigateableView getParentView() {
 		return parent;
 	}
 
+	@Override
 	public String getUriFragment() {
 		return ""+presenter.getCurrentMail().getId();
 	}
 
+	@Override
 	public String getBreadcrumbTitle() {
 		return presenter.getCurrentMail().getSubject();
 	}
 
+	@Override
 	public void setMail(Mail mail) {
 		
 		this.setCaption(mail.getSubject());
@@ -162,6 +168,7 @@ public class ReadMailViewImpl extends Panel implements ReadMailView{
 		
 	}
 
+	@Override
 	public ShowViewEvent getEventToShowThisView() {
 		return new ShowReadMailEvent(presenter.getCurrentMail());
 	}
