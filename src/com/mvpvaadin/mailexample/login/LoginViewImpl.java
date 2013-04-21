@@ -20,7 +20,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class LoginViewImpl extends Window implements LoginView, Serializable{
+public class LoginViewImpl extends VerticalLayout implements LoginView, Serializable{
 
 	private static final long serialVersionUID = 7744334012652777834L;
 	
@@ -30,22 +30,20 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 	private Button clearButton;
 	private TextField usernameField;
 	private PasswordField passwordField;
-	private final Window subWindow;
+	private final Window helpWindow;
 	
 	public LoginViewImpl(EventBus eventBus, AuthenticationService service){
-		super("Login");
 		presenter = new LoginPresenter(this, eventBus, service);
 		generateUI();
 		this.setSizeFull();
 		
 		
-		subWindow = new Window("Help");
-		subWindow.setContent(new Label("Enter any arbitary username and password to login"));
-		subWindow.center();
-		subWindow.setModal(true);
-		subWindow.setSizeUndefined();
+		helpWindow = new Window("Help");
+		helpWindow.setContent(new Label("Enter any arbitary username and password to login"));
+		helpWindow.center();
+		helpWindow.setModal(true);
+		helpWindow.setSizeUndefined();
 		
-		UI.getCurrent().addWindow(subWindow);
 		
 	}
 	
@@ -112,7 +110,7 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().addWindow(subWindow);
+				UI.getCurrent().addWindow(helpWindow);
 			}
 			
 		});
@@ -129,7 +127,7 @@ public class LoginViewImpl extends Window implements LoginView, Serializable{
 
 		usernameField.focus();
 
-		this.setContent(mainLayout);
+		this.addComponent(mainLayout);
 	}
 	
 	@Override

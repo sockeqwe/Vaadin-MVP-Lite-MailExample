@@ -1,5 +1,6 @@
 package com.mvpvaadin.mailexample;
 
+import com.github.wolfie.refresher.Refresher;
 import com.mvplite.event.EventBus;
 import com.mvplite.event.EventHandler;
 import com.mvplite.event.RefresherGlobalEventBusDispatcher;
@@ -12,17 +13,17 @@ import com.mvpvaadin.mailexample.main.MainViewImpl;
 import com.mvpvaadin.mailexample.main.ShowMainViewEvent;
 import com.mvpvaadin.mailexample.service.AuthenticationService;
 import com.mvpvaadin.mailexample.service.MailService;
-import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
-@Theme("MailTheme")
+//@Theme("MailTheme")
+//@Widgetset("com.github.wolfie.refresher.RefresherWidgetset")
 public class MailApplication extends UI {
 	
 	private static final long serialVersionUID = -147738545672590891L;
 	
 	private final EventBus eventBus = new EventBus();
-	private final LiteNavigationController navigationController = new LiteNavigationController(eventBus);
+	private LiteNavigationController navigationController;
 	private RefresherGlobalEventBusDispatcher globalDispatcher;
 	private LoginViewImpl loginView;
 	private MainViewImpl mainView;
@@ -35,10 +36,8 @@ public class MailApplication extends UI {
 	@Override
 	public void init(VaadinRequest request) {
 		bind();
-		
+		navigationController = new LiteNavigationController(eventBus);
 		navigationController.setFire404OnUnknownUriFragment(false);
-		
-		
 		// Instantiate LoginView
 		loginView = new LoginViewImpl(eventBus, authenticationService);
 		
@@ -62,8 +61,9 @@ public class MailApplication extends UI {
 				authenticatedUser.getEmailAddress(), sessionId,
 				null, eventBus);
 		
-		addExtension(globalDispatcher);
-		globalDispatcher.start();
+		Refresher refresher = new Refresher();
+		addExtension(refresher);
+		//globalDispatcher.start();
 	}
 
 
